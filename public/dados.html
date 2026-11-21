@@ -605,22 +605,38 @@ input, select { font-family: inherit; }
 let allSubmissions = [];
 let filteredSubmissions = [];
 
+const LS_PEDIDOS = 'pgto_pedidos';
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Carrega imediatamente do cache local para não ficar em branco
+  try {
+    const cached = JSON.parse(localStorage.getItem(LS_PEDIDOS) || '[]');
+    if (cached && cached.length > 0) {
+      allSubmissions = cached;
+      filterSubmissions();
+      updateStats();
+    }
+  } catch(e) {}
+
   loadSubmissions();
-  // Auto-refresh a cada 8 segundos
+  // Auto-refresh a cada 6 segundos
   setInterval(() => {
     loadSubmissions(false);
-  }, 8000);
+  }, 6000);
 });
 
 async function loadSubmissions(showFeedback = false) {
   try {
     const res = await fetch('/api/pedidos');
     if (res.ok) {
-      allSubmissions = await res.json();
-      filterSubmissions();
-      updateStats();
-      if (showFeedback) showToast('Dados atualizados!');
+      const serverOrders = await res.json();
+      if (Array.isArray(serverOrders)) {
+        allSubmissions = serverOrders;
+        localStorage.setItem(LS_PEDIDOS, JSON.stringify(serverOrders));
+        filterSubmissions();
+        updateStats();
+        if (showFeedback) showToast('Dados atualizados!');
+      }
     }
   } catch(e) {
     console.error('Erro ao buscar envios:', e);
@@ -807,30 +823,26 @@ function copyRecordData(id) {
 
 async function deleteSubmission(id) {
   if (!confirm('Deseja excluir este registro de pedido?')) return;
+  allSubmissions = allSubmissions.filter(s => s.id !== id && s.codigo !== id);
+  localStorage.setItem(LS_PEDIDOS, JSON.stringify(allSubmissions));
+  filterSubmissions();
+  updateStats();
+  showToast('Registro excluído!');
   try {
-    const res = await fetch(`/api/pedidos/${encodeURIComponent(id)}`, { method: 'DELETE' });
-    const data = await res.json();
-    if (data.success) {
-      showToast('Registro excluído!');
-      loadSubmissions();
-    }
-  } catch(e) {
-    showToast('Erro ao excluir registro');
-  }
+    await fetch(`/api/pedidos/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  } catch(e) {}
 }
 
 async function clearAllSubmissions() {
   if (!confirm('ATENÇÃO: Deseja apagar TODOS os registros de dados recebidos? Esta ação não pode ser desfeita.')) return;
+  allSubmissions = [];
+  localStorage.setItem(LS_PEDIDOS, JSON.stringify([]));
+  filterSubmissions();
+  updateStats();
+  showToast('Todos os registros foram apagados!');
   try {
-    const res = await fetch('/api/pedidos', { method: 'DELETE' });
-    const data = await res.json();
-    if (data.success) {
-      showToast('Todos os registros foram apagados!');
-      loadSubmissions();
-    }
-  } catch(e) {
-    showToast('Erro ao limpar registros');
-  }
+    await fetch('/api/pedidos', { method: 'DELETE' });
+  } catch(e) {}
 }
 
 function exportToCSV() {
