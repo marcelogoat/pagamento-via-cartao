@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rastreamento de Pedidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #14453D;
+  --primary-hover: #0F3A33;
+  --teal: #0D9488;
+  --teal-hover: #0F766E;
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: #F9FAFB;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+input { font-family: inherit; }
+
+/* ============ HERO & TOP BAR ============ */
+.hero-wrapper {
+  background: linear-gradient(135deg, #14453D 0%, #1a5a4f 50%, #0f3a33 100%);
+  padding-bottom: 48px;
+  position: relative;
+}
+
+.top-bar-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo-pill {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.header-logo-pill img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.portal-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #E6F4F1;
+  color: #14453D;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.hero-content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 28px 20px 0;
+  text-align: center;
+}
+
+.hero-icon-box {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-icon-box svg {
+  width: 50px;
+  height: 50px;
+  color: #FFFFFF;
+}
+
+.hero-title {
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* ============ FLOATING FORM ============ */
+.main-container {
+  max-width: 680px;
+  width: 100%;
+  margin: -24px auto 0;
+  padding: 0 20px 60px;
+  position: relative;
+  z-index: 10;
+  flex: 1;
+}
+
+.search-form-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 14px;
+  color: #1F2937;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.search-input:focus {
+  background: #FFFFFF;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.search-btn {
+  background: var(--teal);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  white-space: nowrap;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: var(--teal-hover);
+}
+
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-helper-text {
+  text-align: center;
+  font-size: 12px;
+  color: #6B7280;
+  margin-top: 12px;
+}
+
+/* ============ ALERTS ============ */
+.alert-error {
+  margin-top: 20px;
+  background: #FEF2F2;
+  border: 1px solid #FEE2E2;
+  color: #991B1B;
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-cpf-banner {
+  margin-top: 20px;
+  background: #F0FDFA;
+  border: 1px solid #CCFBF1;
+  color: #134E4A;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ============ RESULT CARDS ============ */
+.results-wrapper {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-box {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.card-brand-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.tracking-code-label {
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.tracking-code-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.5px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ECFDF5;
+  border: 1px solid #D1FAE5;
+  color: #065F46;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+.status-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.info-two-col {
+  margin-top: 18px;
+  background: #F9FAFB;
+  border: 1px solid #F3F4F6;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.info-icon-sq {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  flex-shrink: 0;
+}
+
+.info-icon-sq svg { width: 18px; height: 18px; }
+
+.info-item-label {
+  font-size: 12px;
+  color: #6B7280;
+  margin-bottom: 2px;
+}
+
+.info-item-value {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.delivery-estimate-card {
+  margin-top: 18px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.estimate-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #DCFCE7;
+  color: #15803D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.estimate-icon svg { width: 20px; height: 20px; }
+
+.estimate-label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #166534;
+  font-weight: 700;
+}
+
+.estimate-value {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #14532D;
+  margin-top: 2px;
+}
+
+.product-summary-line {
+  margin-top: 16px;
+  font-size: 13.5px;
+  color: #4B5563;
+}
+
+.product-summary-line strong {
+  color: #111827;
+}
+
+/* ============ TIMELINE ============ */
+.timeline-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-event {
+  position: relative;
+  display: flex;
+  gap: 16px;
+}
+
+.timeline-event:not(:last-child) .timeline-connector {
+  position: absolute;
+  left: 23px;
+  top: 50px;
+  bottom: -4px;
+  width: 2px;
+  background: #0D9488;
+}
+
+.timeline-icon-bubble {
+  position: relative;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #0D9488;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+  flex-shrink: 0;
+  ring: 4px solid #CCFBF1;
+}
+
+.timeline-icon-bubble svg { width: 22px; height: 22px; }
+
+.timeline-body {
+  flex: 1;
+  padding-bottom: 28px;
+}
+
+.timeline-event-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.timeline-event-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.timeline-event-date {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.timeline-event-desc {
+  font-size: 13.5px;
+  color: #4B5563;
+  line-height: 1.45;
+}
+
+.timeline-event-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0D9488;
+  margin-top: 6px;
+}
+
+.timeline-event-location svg { width: 14px; height: 14px; }
+
+/* ============ FOOTER ============ */
+.site-footer {
+  border-top: 1px solid #E5E7EB;
+  background: #FFFFFF;
+  padding: 24px 20px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.site-footer img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.75;
+  margin: 0 auto 8px;
+  display: block;
+}
+
+.site-footer p {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+@media (max-width: 640px) {
+  .hero-title { font-size: 26px; }
+  .search-form-card { flex-direction: column; }
+  .search-btn { width: 100%; }
+  .card-box { padding: 18px; }
+  .tracking-code-value { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO & TOPBAR -->
+<div class="hero-wrapper">
+  <div class="top-bar-container">
+    <div class="header-logo-pill">
+      <img src="logo.png" alt="Logo">
+      <span class="portal-tag">Rastreamento</span>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-icon-box">
+      <!-- 3D Package Cube Icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/>
+        <path d="M12 22V12"/>
+        <polyline points="3.29 7 12 12 20.71 7"/>
+        <path d="m7.5 4.27 9 5.15"/>
+      </svg>
+    </div>
+    <h1 class="hero-title">Rastreie seu Pedido</h1>
+    <p class="hero-subtitle">Acompanhe o status de entrega em tempo real</p>
+  </div>
+</div>
+
+<!-- MAIN SEARCH & RESULTS -->
+<main class="main-container">
+  
+  <!-- Floating Form -->
+  <form class="search-form-card" id="tracking-form" onsubmit="handleTrackSubmit(event)">
+    <div class="input-wrapper">
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="tracking-input" placeholder="BR123456789BZ ou CPF" class="search-input" autocomplete="off" oninput="handleInputChange()">
+    </div>
+    <button type="submit" id="tracking-btn" class="search-btn" disabled>Rastrear</button>
+  </form>
+
+  <p class="search-helper-text">Digite o código de rastreio (BR + 9 dígitos + BZ) ou seu CPF</p>
+
+  <!-- Error Alert -->
+  <div id="tracking-error" class="alert-error" style="display: none;">
+    Código de rastreio não encontrado. Verifique os dados digitados ou aguarde até 24h úteis para ativação nos Correios.
+  </div>
+
+  <!-- CPF banner -->
+  <div id="cpf-banner" class="alert-cpf-banner" style="display: none;">
+    1 pedido encontrado para este CPF
+  </div>
+
+  <!-- Results Section -->
+  <div id="tracking-results" class="results-wrapper" style="display: none;">
+
+    <!-- CARD 1: Detalhes do Envio -->
+    <div class="card-box">
+      <img src="logo.png" alt="Logo" class="card-brand-logo">
+      <div class="tracking-code-label">Código de Rastreio</div>
+      <div class="tracking-code-value" id="display-tracking-code">BR948192834BZ</div>
+
+      <div class="status-badge" id="display-badge">
+        <span class="status-badge-dot"></span>
+        <span id="display-status-text">Em Trânsito</span>
+      </div>
+
+      <div class="info-two-col">
+        <div class="info-item">
+          <div class="info-icon-sq">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="info-item-label">Destinatário</div>
+            <div class="info-item-value" id="display-customer-name">Cliente</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-sq">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="info-item-label">Destino (Entrega)</div>
+            <div class="info-item-value" id="display-city">São Paulo / SP</div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-sq">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+          </div>
+          <div>
+            <div class="info-item-label">Origem & Frete</div>
+            <div class="info-item-value"><span id="display-origin">Curitiba / PR</span> &middot; <span id="display-frete" style="color: var(--teal);">SEDEX Express</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card de Previsão de Entrega -->
+      <div class="delivery-estimate-card" id="display-estimate-box">
+        <div class="estimate-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="estimate-label">Previsão Estimada de Entrega</div>
+          <div class="estimate-value" id="display-estimate-text">3 a 6 dias úteis</div>
+        </div>
+      </div>
+
+      <div class="product-summary-line">
+        Produto: <strong id="display-product">Pedido Aprovado</strong> <span id="display-qty">(x1)</span>
+      </div>
+    </div>
+
+    <!-- CARD 2: Histórico de Movimentação -->
+    <div class="card-box">
+      <h3 class="timeline-title">Histórico de Movimentação</h3>
+      <div class="timeline-list" id="timeline-container">
+        <!-- Eventos injetados dinamicamente via JS -->
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <img src="logo.png" alt="Logo">
+  <p>&copy; 2026 &middot; Rastreamento seguro em tempo real</p>
+</footer>
+
+<script>
+function handleInputChange() {
+  const input = document.getElementById('tracking-input');
+  const btn = document.getElementById('tracking-btn');
+  btn.disabled = !input.value.trim();
+}
+
+async function handleTrackSubmit(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById('tracking-input');
+  const val = input.value.trim().toUpperCase();
+  if (!val) return;
+
+  const btn = document.getElementById('tracking-btn');
+  btn.textContent = 'Buscando...';
+  btn.disabled = true;
+
+  document.getElementById('tracking-error').style.display = 'none';
+  document.getElementById('cpf-banner').style.display = 'none';
+  document.getElementById('tracking-results').style.display = 'none';
+
+  try {
+    const res = await fetch(`/api/rastreios/${encodeURIComponent(val)}`);
+    if (res.ok) {
+      const data = await res.json();
+      renderizarResultado(data, val);
+    } else {
+      document.getElementById('tracking-error').style.display = 'block';
+    }
+  } catch (err) {
+    document.getElementById('tracking-error').style.display = 'block';
+  } finally {
+    btn.textContent = 'Rastrear';
+    btn.disabled = false;
+  }
+}
+
+function renderizarResultado(data, searchVal) {
+  const isCpf = /^\d{11}$|^\d{3}\.\d{3}\.\d{3}\-\d{2}$/.test(searchVal);
+  if (isCpf) {
+    document.getElementById('cpf-banner').style.display = 'block';
+  }
+
+  document.getElementById('display-tracking-code').textContent = data.codigo || searchVal;
+  document.getElementById('display-customer-name').textContent = data.cliente || 'Cliente';
+  document.getElementById('display-city').textContent = data.cidadeDestino || 'Destino';
+  document.getElementById('display-origin').textContent = data.cidadeOrigem || 'Origem';
+  document.getElementById('display-frete').textContent = data.frete || 'SEDEX Express';
+  document.getElementById('display-product').textContent = data.produto || 'Pedido Online';
+  document.getElementById('display-qty').textContent = `(x${data.quantidade || 1})`;
+  document.getElementById('display-status-text').textContent = data.status || 'Em Trânsito';
+
+  // Ajustar cor do badge conforme status
+  const badge = document.getElementById('display-badge');
+  const dot = badge.querySelector('.status-badge-dot');
+  const st = (data.status || '').toLowerCase();
+  if (st.includes('entregue')) {
+    badge.style.background = '#F0FDF4'; badge.style.borderColor = '#BBF7D0'; badge.style.color = '#166534';
+    dot.style.background = '#16A34A';
+  } else if (st.includes('saiu') || st === 'aguardando retirada') {
+    badge.style.background = '#FFFBEB'; badge.style.borderColor = '#FDE68A'; badge.style.color = '#92400E';
+    dot.style.background = '#D97706';
+  } else if (st.includes('pagamento') || st.includes('faturado')) {
+    badge.style.background = '#F3E8FF'; badge.style.borderColor = '#E9D5FF'; badge.style.color = '#6B21A8';
+    dot.style.background = '#7C3AED';
+  } else {
+    badge.style.background = '#ECFDF5'; badge.style.borderColor = '#D1FAE5'; badge.style.color = '#065F46';
+    dot.style.background = '#10B981';
+  }
+
+  // Calcular Previsão Estimada de Entrega baseada no tipo de frete (SEDEX: 3 a 6 dias úteis)
+  document.getElementById('display-estimate-text').textContent = calcularPrevisaoEntrega(data.frete, data.status, data.criadoEm);
+
+  // Renderizar Timeline com ícones específicos de cada etapa
+  const container = document.getElementById('timeline-container');
+  container.innerHTML = '';
+
+  const eventos = data.eventos || [];
+  eventos.forEach((ev, idx) => {
+    const isLast = idx === eventos.length - 1;
+    const itemEl = document.createElement('div');
+    itemEl.className = 'timeline-event';
+
+    // Determinar ícone e cor por tipo ou título
+    let iconSvg = '';
+    const t = (ev.tipo || ev.titulo || '').toLowerCase();
+
+    if (t.includes('entregue') && !t.includes('saiu')) {
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+    } else if (t.includes('entrega') || t.includes('saiu')) {
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    } else if (t.includes('recebido') || t.includes('centro') || t.includes('unidade')) {
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>';
+    } else if (t.includes('postado')) {
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/></svg>';
+    } else if (t.includes('faturado') || t.includes('pagamento')) {
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+    } else {
+      // Padrão: caminhão em trânsito
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>';
+    }
+
+    itemEl.innerHTML = `
+      ${!isLast ? '<div class="timeline-connector"></div>' : ''}
+      <div class="timeline-icon-bubble">
+        ${iconSvg}
+      </div>
+      <div class="timeline-body" style="${isLast ? 'padding-bottom: 0;' : ''}">
+        <div class="timeline-event-header">
+          <h4 class="timeline-event-title">${escapeHtml(ev.titulo)}</h4>
+          <span class="timeline-event-date">${escapeHtml(ev.data)}</span>
+        </div>
+        <p class="timeline-event-desc">${escapeHtml(ev.descricao)}</p>
+        <div class="timeline-event-location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>${escapeHtml(ev.local || 'Unidade Operacional')}</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(itemEl);
+  });
+
+  document.getElementById('tracking-results').style.display = 'flex';
+  document.getElementById('tracking-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function calcularPrevisaoEntrega(frete, status, criadoEm) {
+  if (status === 'Entregue') {
+    return 'Objeto entregue com sucesso';
+  }
+  if (status === 'Pagamento Confirmado') {
+    return 'Aguardando envio pela transportadora';
+  }
+  
+  const baseDate = criadoEm ? new Date(criadoEm) : new Date();
+  const isSedex = (frete || '').toUpperCase().includes('SEDEX');
+  
+  // Função para somar dias úteis (pula sábado e domingo)
+  function somarDiasUteis(data, diasUteis) {
+    let d = new Date(data);
+    let adicionados = 0;
+    while (adicionados < diasUteis) {
+      d.setDate(d.getDate() + 1);
+      const diaSemana = d.getDay();
+      if (diaSemana !== 0 && diaSemana !== 6) {
+        adicionados++;
+      }
+    }
+    return d;
+  }
+
+  function formatDiaMes(d) {
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    return `${dia}/${mes}`;
+  }
+
+  if (isSedex) {
+    const dataMin = somarDiasUteis(baseDate, 3);
+    const dataMax = somarDiasUteis(baseDate, 6);
+    return `${formatDiaMes(dataMin)} a ${formatDiaMes(dataMax)} (3 a 6 dias úteis)`;
+  } else {
+    // Frete Grátis com Seguro (8 a 12 dias úteis)
+    const dataMin = somarDiasUteis(baseDate, 8);
+    const dataMax = somarDiasUteis(baseDate, 12);
+    return `${formatDiaMes(dataMin)} a ${formatDiaMes(dataMax)} (8 a 12 dias úteis)`;
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Parâmetros de URL automáticos
+const urlParams = new URLSearchParams(window.location.search);
+const queryCode = urlParams.get('codigo') || urlParams.get('c');
+const queryNome = urlParams.get('nome') || urlParams.get('destinatario');
+const queryProduto = urlParams.get('produto');
+const queryCidade = urlParams.get('cidade') || urlParams.get('destino');
+const queryStatus = urlParams.get('status');
+
+if (queryCode) {
+  document.getElementById('tracking-input').value = queryCode;
+  document.getElementById('tracking-btn').disabled = false;
+  handleTrackSubmit(new Event('submit'));
+}
+</script>
+
+</body>
+</html>

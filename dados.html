@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Dados Recebidos &middot; Painel Administrativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #14453D;
+  --primary-hover: #0F3A33;
+  --teal: #0D9488;
+  --teal-hover: #0F766E;
+  --teal-light: #CCFBF1;
+  --bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --border: #E2E8F0;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+input, select { font-family: inherit; }
+
+/* ============ NAVBAR ============ */
+.admin-navbar {
+  background: #14453D;
+  color: #FFFFFF;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  background: #059669;
+  color: #ECFDF5;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34D399;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav-action {
+  background: rgba(255,255,255,0.12);
+  color: #FFFFFF;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.btn-nav-action:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+/* ============ MAIN LAYOUT ============ */
+.main-wrapper {
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+  flex: 1;
+}
+
+.top-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+.page-title p {
+  font-size: 14.5px;
+  color: #64748B;
+}
+
+/* ============ STATS ROW ============ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-info h5 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748B;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.stat-info h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #F0FDFA;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-icon svg { width: 22px; height: 22px; }
+
+/* ============ ACTION BAR & FILTERS ============ */
+.filter-bar {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-input-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+.search-input-box svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #94A3B8;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 14px 10px 42px;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s;
+}
+.search-input:focus {
+  background: #FFFFFF;
+  border-color: var(--teal);
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-action-tool {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-refresh {
+  background: #F0FDFA;
+  color: #0D9488;
+  border: 1px solid #CCFBF1;
+}
+.btn-refresh:hover { background: #CCFBF1; }
+
+.btn-export {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #DBEAFE;
+}
+.btn-export:hover { background: #DBEAFE; }
+
+.btn-clear-all {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+}
+.btn-clear-all:hover { background: #FEE2E2; }
+
+/* ============ SUBMISSIONS LIST (CARDS DETALHADOS) ============ */
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.submission-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: all 0.2s;
+}
+.submission-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.sub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #F1F5F9;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sub-code-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sub-code-badge {
+  background: #F1F5F9;
+  color: #0F172A;
+  font-family: ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+}
+
+.sub-time {
+  font-size: 12.5px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sub-product-price {
+  text-align: right;
+}
+.sub-product-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+}
+.sub-price-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--teal);
+}
+
+/* GRID DE CAMPOS PREENCHIDOS */
+.fields-display-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  background: #F8FAFC;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #EDF2F7;
+  margin-bottom: 16px;
+}
+
+.field-pill-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.field-pill-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+}
+.field-pill-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  word-break: break-word;
+}
+
+/* BOTÕES DE AÇÃO DO REGISTRO */
+.sub-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-whatsapp-direct {
+  background: #25D366;
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
+}
+.btn-whatsapp-direct:hover {
+  background: #1EBE5D;
+  transform: translateY(-1px);
+}
+
+.card-sub-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-small-tool {
+  background: #F1F5F9;
+  color: #334155;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.btn-small-tool:hover { background: #E2E8F0; }
+
+.btn-delete-record {
+  background: #FEF2F2;
+  color: #DC2626;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.btn-delete-record:hover { background: #FEE2E2; }
+
+/* MODAL DE DETALHES */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-container {
+  background: #FFFFFF;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 { font-size: 18px; font-weight: 800; color: #0F172A; }
+.btn-close-modal { background: none; font-size: 24px; color: #64748B; cursor: pointer; }
+
+.modal-body {
+  padding: 24px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.raw-json-box {
+  background: #0F172A;
+  color: #38BDF8;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+  padding: 16px;
+  border-radius: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin-top: 14px;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  display: none;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 9999;
+  border-left: 4px solid var(--teal);
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="admin-navbar">
+  <div class="brand-wrapper">
+    <strong style="font-size: 16px;">Central de Dados Recebidos</strong>
+    <span class="brand-badge">
+      <span class="pulse-dot"></span>
+      Tempo Real
+    </span>
+  </div>
+  <div class="nav-actions">
+    <a href="/admin" class="btn-nav-action">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Gerenciar Campos & Links
+    </a>
+    <a href="/" target="_blank" class="btn-nav-action">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Ver Loja / Checkout
+    </a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main-wrapper">
+
+  <div class="top-section-header">
+    <div class="page-title">
+      <h1>Central de Dados Recebidos</h1>
+      <p>Todos os dados preenchidos pelos clientes nos formulários chegam aqui instantaneamente.</p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-info">
+        <h5>Total de Envios</h5>
+        <h2 id="stat-total-submissions">0</h2>
+      </div>
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-info">
+        <h5>Recebidos Hoje</h5>
+        <h2 id="stat-today-submissions">0</h2>
+      </div>
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-info">
+        <h5>Valor Total em Pedidos</h5>
+        <h2 id="stat-total-value">R$ 0,00</h2>
+      </div>
+      <div class="stat-icon" style="color: #10B981; background: #ECFDF5;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTROS & AÇÕES -->
+  <div class="filter-bar">
+    <div class="search-input-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" class="search-input" placeholder="Buscar por cliente, telefone, CPF, código ou cidade..." oninput="filterSubmissions()">
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn-action-tool btn-refresh" onclick="loadSubmissions(true)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        <span>Atualizar</span>
+      </button>
+
+      <button class="btn-action-tool btn-export" onclick="exportToCSV()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Exportar CSV</span>
+      </button>
+
+      <button class="btn-action-tool btn-clear-all" onclick="clearAllSubmissions()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span>Limpar Tudo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- LISTA DE ENVIOS RECEBIDOS -->
+  <div class="submissions-list" id="submissions-container">
+    <!-- Injetado dinamicamente via JS -->
+  </div>
+
+</main>
+
+<!-- MODAL VER DETALHES -->
+<div class="modal-overlay" id="details-modal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3 id="modal-sub-title">Detalhes do Registro</h3>
+      <button class="btn-close-modal" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-sub-content">
+      <!-- Injetado dinamicamente -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast-msg">Mensagem</div>
+
+<script>
+let allSubmissions = [];
+let filteredSubmissions = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSubmissions();
+  // Auto-refresh a cada 8 segundos
+  setInterval(() => {
+    loadSubmissions(false);
+  }, 8000);
+});
+
+async function loadSubmissions(showFeedback = false) {
+  try {
+    const res = await fetch('/api/pedidos');
+    if (res.ok) {
+      allSubmissions = await res.json();
+      filterSubmissions();
+      updateStats();
+      if (showFeedback) showToast('Dados atualizados!');
+    }
+  } catch(e) {
+    console.error('Erro ao buscar envios:', e);
+  }
+}
+
+function updateStats() {
+  document.getElementById('stat-total-submissions').textContent = allSubmissions.length;
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayCount = allSubmissions.filter(s => (s.criadoEm || '').startsWith(todayStr)).length;
+  document.getElementById('stat-today-submissions').textContent = todayCount;
+
+  let totalVal = 0;
+  allSubmissions.forEach(s => {
+    const valNum = parseFloat((s.valor || '').replace(/[^\d,\.]/g, '').replace(',', '.')) || 0;
+    totalVal += valNum;
+  });
+  document.getElementById('stat-total-value').textContent = totalVal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function filterSubmissions() {
+  const query = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!query) {
+    filteredSubmissions = allSubmissions;
+  } else {
+    filteredSubmissions = allSubmissions.filter(s => {
+      const codeMatch = (s.codigo || s.id || '').toLowerCase().includes(query);
+      const prodMatch = (s.produto || '').toLowerCase().includes(query);
+      const fieldsMatch = Object.values(s.dadosCliente || {}).some(v => (v || '').toLowerCase().includes(query));
+      return codeMatch || prodMatch || fieldsMatch;
+    });
+  }
+  renderSubmissions();
+}
+
+function renderSubmissions() {
+  const container = document.getElementById('submissions-container');
+  container.innerHTML = '';
+
+  if (filteredSubmissions.length === 0) {
+    container.innerHTML = `
+      <div style="background: #FFFFFF; border: 1px dashed #CBD5E1; border-radius: 18px; padding: 48px; text-align: center; color: #64748B;">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 12px; color: #94A3B8;"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+        <h3 style="font-size: 16px; font-weight: 800; color: #1E293B; margin-bottom: 4px;">Nenhum envio recebido ainda</h3>
+        <p style="font-size: 13.5px;">Assim que um cliente preencher o formulário no checkout, os dados aparecerão aqui em tempo real.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filteredSubmissions.forEach(sub => {
+    const card = document.createElement('div');
+    card.className = 'submission-card';
+
+    const dt = sub.criadoEm ? new Date(sub.criadoEm).toLocaleString('pt-BR') : '-';
+    const fields = sub.dadosCliente || {};
+
+    // Localizar telefone ou whatsapp
+    let rawPhone = '';
+    for (const [k, v] of Object.entries(fields)) {
+      if (k.toLowerCase().includes('tel') || k.toLowerCase().includes('whats') || k.toLowerCase().includes('cel')) {
+        rawPhone = v.replace(/\D/g, '');
+        break;
+      }
+    }
+
+    // Gerar pills de campos preenchidos
+    let fieldsHtml = '';
+    Object.entries(fields).forEach(([k, v]) => {
+      fieldsHtml += `
+        <div class="field-pill-item">
+          <span class="field-pill-label">${escapeHtml(k)}</span>
+          <span class="field-pill-val">${escapeHtml(v || '-')}</span>
+        </div>
+      `;
+    });
+
+    // Link WhatsApp
+    let whatsappBtnHtml = '';
+    if (rawPhone && rawPhone.length >= 10) {
+      const ddiPhone = rawPhone.startsWith('55') ? rawPhone : '55' + rawPhone;
+      const firstName = Object.values(fields)[0] || 'Cliente';
+      const msg = encodeURIComponent(`Olá ${firstName}! Vi seu pedido #${sub.codigo || sub.id} de ${sub.produto || 'nosso produto'} com Pagamento na Entrega. Gostaria de confirmar seu endereço para envio!`);
+      whatsappBtnHtml = `
+        <a href="https://wa.me/${ddiPhone}?text=${msg}" target="_blank" class="btn-whatsapp-direct">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.275.072.376-.044c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+          <span>Chamar no WhatsApp</span>
+        </a>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="sub-header">
+        <div class="sub-code-group">
+          <span class="sub-code-badge">${escapeHtml(sub.codigo || sub.id)}</span>
+          <span class="sub-time">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${dt}
+          </span>
+        </div>
+        <div class="sub-product-price">
+          <div class="sub-product-name">${escapeHtml(sub.produto || 'Pedido')}</div>
+          <div class="sub-price-val">${escapeHtml(sub.valor || 'R$ 0,00')}</div>
+        </div>
+      </div>
+
+      <div class="fields-display-grid">
+        ${fieldsHtml || '<span style="color:#64748B;">Nenhum dado informado</span>'}
+      </div>
+
+      <div class="sub-footer-actions">
+        ${whatsappBtnHtml}
+        <div class="card-sub-tools">
+          <button class="btn-small-tool" onclick="viewDetails('${sub.id}')">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Ver Completo
+          </button>
+          <button class="btn-small-tool" onclick="copyRecordData('${sub.id}')">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+          <button class="btn-delete-record" onclick="deleteSubmission('${sub.id}')" title="Excluir Registro">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Excluir
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function viewDetails(id) {
+  const sub = allSubmissions.find(s => s.id === id);
+  if (!sub) return;
+
+  document.getElementById('modal-sub-title').textContent = `Pedido ${sub.codigo || sub.id}`;
+  const content = document.getElementById('modal-sub-content');
+
+  let rows = '';
+  Object.entries(sub.dadosCliente || {}).forEach(([k, v]) => {
+    rows += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F1F5F9;">
+      <strong style="color:#64748B;">${escapeHtml(k)}:</strong>
+      <span style="font-weight:700; color:#0F172A; text-align:right;">${escapeHtml(v)}</span>
+    </div>`;
+  });
+
+  content.innerHTML = `
+    <div style="margin-bottom: 16px;">
+      <h4 style="font-size: 16px; font-weight:800; color:#0F172A;">${escapeHtml(sub.produto || 'Produto')}</h4>
+      <p style="font-size: 13px; color:#64748B;">Valor: <strong style="color:#0D9488;">${escapeHtml(sub.valor || 'R$ 0,00')}</strong> &middot; Data: ${sub.criadoEm ? new Date(sub.criadoEm).toLocaleString('pt-BR') : '-'}</p>
+    </div>
+
+    <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:14px;">
+      ${rows}
+    </div>
+
+    <h5 style="font-size: 12px; font-weight:700; color:#64748B; text-transform:uppercase;">JSON Bruto Recebido:</h5>
+    <div class="raw-json-box">${escapeHtml(JSON.stringify(sub, null, 2))}</div>
+  `;
+
+  document.getElementById('details-modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('details-modal').style.display = 'none';
+}
+
+function copyRecordData(id) {
+  const sub = allSubmissions.find(s => s.id === id);
+  if (!sub) return;
+
+  let text = `📦 PEDIDO ${sub.codigo || sub.id}\nProduto: ${sub.produto}\nValor: ${sub.valor}\nData: ${new Date(sub.criadoEm).toLocaleString('pt-BR')}\n\n--- DADOS DO CLIENTE ---\n`;
+  Object.entries(sub.dadosCliente || {}).forEach(([k, v]) => {
+    text += `${k}: ${v}\n`;
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Dados copiados para a área de transferência!');
+  });
+}
+
+async function deleteSubmission(id) {
+  if (!confirm('Deseja excluir este registro de pedido?')) return;
+  try {
+    const res = await fetch(`/api/pedidos/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Registro excluído!');
+      loadSubmissions();
+    }
+  } catch(e) {
+    showToast('Erro ao excluir registro');
+  }
+}
+
+async function clearAllSubmissions() {
+  if (!confirm('ATENÇÃO: Deseja apagar TODOS os registros de dados recebidos? Esta ação não pode ser desfeita.')) return;
+  try {
+    const res = await fetch('/api/pedidos', { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Todos os registros foram apagados!');
+      loadSubmissions();
+    }
+  } catch(e) {
+    showToast('Erro ao limpar registros');
+  }
+}
+
+function exportToCSV() {
+  if (allSubmissions.length === 0) {
+    showToast('Nenhum dado disponível para exportar.');
+    return;
+  }
+
+  // Descobrir todas as chaves únicas de dadosCliente
+  const allFieldKeys = new Set();
+  allSubmissions.forEach(s => {
+    Object.keys(s.dadosCliente || {}).forEach(k => allFieldKeys.add(k));
+  });
+  const fieldKeysArr = Array.from(allFieldKeys);
+
+  const header = ['Codigo', 'Data', 'Produto', 'Valor', ...fieldKeysArr];
+  const csvRows = [header.join(';')];
+
+  allSubmissions.forEach(s => {
+    const row = [
+      `"${s.codigo || s.id}"`,
+      `"${s.criadoEm ? new Date(s.criadoEm).toLocaleString('pt-BR') : ''}"`,
+      `"${(s.produto || '').replace(/"/g, '""')}"`,
+      `"${(s.valor || '').replace(/"/g, '""')}"`,
+      ...fieldKeysArr.map(k => `"${((s.dadosCliente && s.dadosCliente[k]) || '').toString().replace(/"/g, '""')}"`)
+    ];
+    csvRows.push(row.join(';'));
+  });
+
+  const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `dados_recebidos_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast-msg');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+
+</body>
+</html>

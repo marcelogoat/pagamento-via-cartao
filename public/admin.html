@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Administrativo — Rastreios</title>
+<title>Painel Administrativo &middot; Configuração de Campos & Links</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,238 +21,23 @@
   --border: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
-  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 body {
   font-family: var(--font-main);
   background-color: var(--bg);
   color: var(--text-main);
-  -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ============ MODO ESCURO ============ */
-body.dark-mode {
-  --bg: #0F172A;
-  --card-bg: #1E293B;
-  --border: #334155;
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --teal-light: rgba(13, 148, 136, 0.25);
-}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+input, select, textarea { font-family: inherit; }
 
-body.dark-mode thead th {
-  background: #111827;
-  color: #94A3B8;
-  border-bottom-color: #334155;
-}
-
-body.dark-mode tbody tr {
-  border-bottom-color: #334155;
-}
-
-body.dark-mode tbody tr:hover {
-  background: #253349;
-}
-
-body.dark-mode .code-badge {
-  background: #334155;
-  color: #38BDF8;
-}
-
-body.dark-mode .code-badge:hover {
-  background: #475569;
-}
-
-body.dark-mode .route-cell {
-  color: #F1F5F9;
-}
-
-body.dark-mode .btn-icon {
-  background: #334155;
-  color: #CBD5E1;
-}
-
-body.dark-mode .btn-icon:hover {
-  background: #475569;
-  color: #FFFFFF;
-}
-
-body.dark-mode .search-input-field,
-body.dark-mode .filter-select,
-body.dark-mode .form-input,
-body.dark-mode .form-select {
-  background: #0F172A;
-  color: #F8FAFC;
-  border-color: #334155;
-}
-
-body.dark-mode .search-input-field:focus,
-body.dark-mode .filter-select:focus,
-body.dark-mode .form-input:focus,
-body.dark-mode .form-select:focus {
-  background: #1E293B;
-  border-color: var(--teal);
-}
-
-body.dark-mode .btn-generate-code {
-  background: #334155;
-  color: #F8FAFC;
-  border-color: #475569;
-}
-
-body.dark-mode .btn-generate-code:hover {
-  background: #475569;
-}
-
-body.dark-mode .btn-cancel {
-  background: #1E293B;
-  color: #94A3B8;
-  border-color: #334155;
-}
-
-body.dark-mode .btn-cancel:hover {
-  background: #334155;
-  color: #F8FAFC;
-}
-
-body.dark-mode .modal-header,
-body.dark-mode .modal-footer {
-  background: #111827;
-  border-color: #334155;
-}
-
-body.dark-mode .modal-content {
-  background: #1E293B;
-}
-
-body.dark-mode .form-label {
-  color: #CBD5E1;
-}
-
-body.dark-mode .login-card {
-  background: #1E293B;
-  color: #F8FAFC;
-}
-
-body.dark-mode .login-title {
-  color: #F8FAFC;
-}
-
-body.dark-mode .login-subtitle {
-  color: #94A3B8;
-}
-
-body.dark-mode .login-logo-pill {
-  background: #334155;
-}
-
-/* ============ TELA DE LOGIN ============ */
-#secao-login {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #14453D 0%, #0F3A33 100%);
-}
-
-.login-card {
-  background: #FFFFFF;
-  border-radius: 20px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  width: 100%;
-  max-width: 420px;
-  padding: 36px 32px;
-  text-align: center;
-}
-
-.login-logo-pill {
-  background: #F1F5F9;
-  border-radius: 12px;
-  padding: 8px 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.login-logo-pill img {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-}
-
-.login-title {
-  font-size: 22px;
-  font-weight: 800;
-  color: #0F172A;
-  margin-bottom: 6px;
-}
-
-.login-subtitle {
-  font-size: 13.5px;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  text-align: left;
-}
-
-.login-alert-error {
-  background: #FEF2F2;
-  border: 1px solid #FEE2E2;
-  color: #991B1B;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  display: none;
-  text-align: center;
-}
-
-.btn-entrar {
-  background: var(--teal);
-  color: #FFFFFF;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 14.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.btn-entrar:hover {
-  background: var(--teal-hover);
-}
-
-.btn-entrar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* ============ PAINEL DASHBOARD (PROTEGIDO) ============ */
-#secao-dashboard {
-  display: none;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* ============ NAVBAR ============ */
+/* ============ HEADER ============ */
 .admin-navbar {
   background: #14453D;
   color: #FFFFFF;
@@ -260,270 +45,402 @@ body.dark-mode .login-logo-pill {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.brand-section {
+.brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-.brand-pill {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 5px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.brand-pill img {
-  height: 22px;
-  width: auto;
-  object-fit: contain;
-}
-
-.brand-title {
-  font-size: 17px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .brand-badge {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  color: #A7F3D0;
   font-size: 11px;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
   font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-.btn-secondary-nav {
-  background: rgba(255, 255, 255, 0.12);
+.btn-nav-action {
+  background: rgba(255,255,255,0.12);
   color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
-  text-decoration: none;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
-
-.btn-secondary-nav:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-.btn-theme-toggle {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-.btn-primary-nav {
-  background: #0D9488;
-  color: #FFFFFF;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13.5px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.15s;
-}
-
-.btn-primary-nav:hover {
-  background: #0F766E;
-}
-
-.btn-logout {
-  background: rgba(239, 68, 68, 0.15);
-  color: #FCA5A5;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s;
-}
-
-.btn-logout:hover {
-  background: rgba(239, 68, 68, 0.3);
-  color: #FFFFFF;
+.btn-nav-action:hover {
+  background: rgba(255,255,255,0.22);
 }
 
 /* ============ MAIN LAYOUT ============ */
 .main-wrapper {
-  max-width: 1280px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 28px 24px 60px;
+  padding: 28px 20px 60px;
   flex: 1;
 }
 
-/* ============ STATS CARDS ============ */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-}
-
-.stat-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.stat-icon svg { width: 22px; height: 22px; }
-.stat-icon.total { background: #EEF2FF; color: #4F46E5; }
-.stat-icon.transito { background: #ECFDF5; color: #059669; }
-.stat-icon.entrega { background: #FEF3C7; color: #D97706; }
-.stat-icon.entregue { background: #F0FDF4; color: #16A34A; }
-
-.stat-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--text-main);
-  line-height: 1.1;
-}
-
-.stat-label {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-/* ============ CONTROLS TOOLBAR ============ */
-.toolbar-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 20px;
+.top-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
+  gap: 16px;
 }
 
-.search-box {
-  position: relative;
-  flex: 1;
-  min-width: 280px;
+.page-title h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
 }
-
-.search-box svg {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
-  color: #94A3B8;
-  pointer-events: none;
-}
-
-.search-input-field {
-  width: 100%;
-  padding: 10px 14px 10px 40px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+.page-title p {
   font-size: 14px;
-  background: #F8FAFC;
-  outline: none;
-  transition: all 0.15s;
+  color: #64748B;
 }
 
-.search-input-field:focus {
+.btn-primary {
+  background: var(--teal);
+  color: #FFFFFF;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+  transition: all 0.2s;
+}
+.btn-primary:hover {
+  background: var(--teal-hover);
+  transform: translateY(-1px);
+}
+
+/* ============ TABS ============ */
+.tabs-nav {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748B;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #0F172A; }
+.tab-btn.active {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+/* ============ GLOBAL FIELDS SECTION ============ */
+.global-fields-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  margin-bottom: 24px;
+}
+
+.global-header-callout {
+  background: #F0FDFA;
+  border: 1px solid #CCFBF1;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.callout-text h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0F766E;
+  margin-bottom: 3px;
+}
+.callout-text p {
+  font-size: 13px;
+  color: #115E59;
+}
+
+.btn-save-global {
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+  color: #FFFFFF;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-save-global:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.45);
+}
+
+/* ============ FIELDS BUILDER ============ */
+.fields-builder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field-builder-row {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s;
+}
+.field-builder-row:hover {
+  border-color: #CBD5E1;
+  background: #FFFFFF;
+}
+
+.field-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field-handle-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1E293B;
+}
+
+.field-badge-type {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #E2E8F0;
+  color: #475569;
+}
+
+.field-row-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1.1fr 1fr 0.9fr 0.8fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.btn-remove-field {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-remove-field:hover {
+  background: #FEE2E2;
+  transform: scale(1.05);
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s;
+}
+.text-input:focus {
   background: #FFFFFF;
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 
-.filter-group {
+.btn-add-field {
+  background: #F0FDFA;
+  color: #0D9488;
+  border: 2px dashed #99F6E4;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.filter-select {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13.5px;
-  background: #FFFFFF;
-  color: var(--text-main);
-  font-weight: 600;
-  outline: none;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 14px;
+}
+.btn-add-field:hover {
+  background: #CCFBF1;
+  border-color: #0D9488;
 }
 
-/* ============ TABLE CARD ============ */
-.table-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+/* ============ LINK CARDS GRID ============ */
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.link-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-  overflow: hidden;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s;
+}
+.link-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
 
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
+.link-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.link-product-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+
+.link-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--teal);
+}
+
+.link-slug-badge {
+  background: #F1F5F9;
+  color: #475569;
+  font-size: 11.5px;
+  font-family: ui-monospace, monospace;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 14px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-card-actions {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 14px;
+}
+
+.btn-card-action {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-copy {
+  background: #F0FDFA;
+  color: #0D9488;
+  border: 1px solid #CCFBF1;
+}
+.btn-copy:hover { background: #CCFBF1; }
+
+.btn-open {
+  background: #F8FAFC;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+}
+.btn-open:hover { background: #E2E8F0; }
+
+.btn-delete {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+}
+.btn-delete:hover { background: #FEE2E2; }
+
+/* ============ ORDERS TABLE ============ */
+.orders-table-wrapper {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 table {
@@ -534,1198 +451,658 @@ table {
 
 thead th {
   background: #F8FAFC;
-  padding: 14px 18px;
+  padding: 14px 16px;
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
   font-weight: 700;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-tbody tr {
-  border-bottom: 1px solid #F1F5F9;
-  transition: background 0.15s;
-}
-
-tbody tr:hover {
-  background: #F8FAFC;
+  color: #64748B;
+  text-transform: uppercase;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 tbody td {
-  padding: 16px 18px;
+  padding: 14px 16px;
   font-size: 13.5px;
-  vertical-align: middle;
-}
-
-.code-badge {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 800;
-  font-size: 13px;
-  color: #0F172A;
-  background: #F1F5F9;
-  padding: 4px 8px;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.code-badge:hover {
-  background: #E2E8F0;
-}
-
-.route-cell {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
   color: #1E293B;
-  font-size: 13px;
+  border-bottom: 1px solid #F1F5F9;
 }
+tbody tr:hover { background: #F8FAFC; }
 
-.route-arrow {
-  color: var(--teal);
-  font-weight: 800;
-}
-
-.badge-frete {
-  display: inline-block;
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: #EFF6FF;
-  color: #1D4ED8;
-  border: 1px solid #DBEAFE;
-}
-
-.badge-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  white-space: nowrap;
-}
-
-.badge-status.transito { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
-.badge-status.postado { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
-.badge-status.entrega { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
-.badge-status.entregue { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
-.badge-status.faturado { background: #F3E8FF; color: #6B21A8; border: 1px solid #E9D5FF; }
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.actions-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #F1F5F9;
-  color: #475569;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-decoration: none;
-}
-
-.btn-icon:hover {
-  background: #E2E8F0;
-  color: var(--text-main);
-}
-
-.btn-icon.view:hover {
-  background: var(--teal-light);
-  color: var(--teal);
-}
-
-.btn-icon.delete:hover {
-  background: #FEE2E2;
-  color: #DC2626;
-}
-
-.btn-icon svg { width: 16px; height: 16px; }
-
-.empty-state {
-  text-align: center;
-  padding: 48px 20px;
-  color: var(--text-muted);
-}
-
-.empty-state svg {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 12px;
-  color: #CBD5E1;
-}
-
-/* ============ MODAL ============ */
+/* MODAL */
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
+  z-index: 999;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-  padding: 16px;
+  padding: 20px;
 }
 
-.modal-content {
+.modal-container {
   background: #FFFFFF;
+  border-radius: 20px;
   width: 100%;
-  max-width: 580px;
-  border-radius: 18px;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+  max-width: 620px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
   overflow: hidden;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .modal-header {
   padding: 20px 24px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+.modal-header h3 { font-size: 18px; font-weight: 800; color: #0F172A; }
+.btn-close-modal { background: none; font-size: 22px; color: #64748B; cursor: pointer; }
 
-.modal-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.modal-close {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-muted);
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #E2E8F0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-close:hover { color: var(--text-main); }
-.modal-close svg { width: 22px; height: 22px; }
-
-.modal-body {
-  padding: 24px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #F8FAFC;
 }
 
 .form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  margin-bottom: 14px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #334155;
-}
-
-.form-input, .form-select {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  background: #F8FAFC;
-  transition: all 0.15s;
-}
-
-.form-input:focus, .form-select:focus {
-  background: #FFFFFF;
-  border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-}
-
-.code-generator-wrapper {
-  display: flex;
-  gap: 8px;
-}
-
-.btn-generate-code {
-  background: #F1F5F9;
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  padding: 0 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.btn-generate-code:hover { background: #E2E8F0; }
-
-.modal-footer {
-  padding: 18px 24px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  background: #F8FAFC;
-}
-
-.btn-cancel {
-  background: #FFFFFF;
-  border: 1px solid var(--border);
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--text-muted);
-}
-
-.btn-cancel:hover { background: #F1F5F9; }
-
-.btn-save {
-  background: var(--teal);
-  color: #FFFFFF;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-save:hover { background: var(--teal-hover); }
-
-/* Toast */
-.toast-notice {
+/* TOAST */
+.toast {
   position: fixed;
   bottom: 24px;
   right: 24px;
   background: #0F172A;
   color: #FFFFFF;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 600;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
   display: none;
-  z-index: 1000;
-  animation: slideIn 0.2s ease-out;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@media (max-width: 768px) {
-  .form-grid-2 { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .toolbar-card { flex-direction: column; align-items: stretch; }
-  .search-box { min-width: 100%; }
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 9999;
+  border-left: 4px solid var(--teal);
 }
 </style>
 </head>
 <body>
 
-<!-- ============ TELA DE LOGIN ============ -->
-<div id="secao-login">
-  <div class="login-card">
-    <div class="login-logo-pill">
-      <img src="logo.png" alt="Logo">
-    </div>
-    <h2 class="login-title">Acesso Administrativo</h2>
-    <p class="login-subtitle">Entre com suas credenciais para gerenciar os rastreios</p>
-
-    <div id="login-erro" class="login-alert-error">
-      Usuário ou senha incorretos.
-    </div>
-
-    <form class="login-form" onsubmit="fazerLogin(event)">
-      <div class="form-group">
-        <label class="form-label">Usuário</label>
-        <input type="text" id="login-usuario" class="form-input" placeholder="admin" autocomplete="username" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Senha</label>
-        <input type="password" id="login-senha" class="form-input" placeholder="••••••••" autocomplete="current-password" required>
-      </div>
-
-      <button type="submit" id="btn-login-submit" class="btn-entrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span>Entrar no Painel</span>
-      </button>
-    </form>
+<!-- NAVBAR -->
+<header class="admin-navbar">
+  <div class="brand-wrapper">
+    <strong style="font-size: 16px;">Painel de Pagamento na Entrega</strong>
+    <span class="brand-badge">Gestão Geral de Campos & Links</span>
   </div>
-</div>
+  <div class="nav-actions">
+    <a href="/dados" class="btn-nav-action" style="background: #059669; color: #FFFFFF;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      📥 Ver Dados Recebidos
+    </a>
+    <a href="/" target="_blank" class="btn-nav-action">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Ver Loja / Checkout
+    </a>
+  </div>
+</header>
 
-<!-- ============ PAINEL DASHBOARD (PROTEGIDO) ============ -->
-<div id="secao-dashboard">
+<!-- MAIN -->
+<main class="main-wrapper">
 
-  <!-- TOP NAVBAR -->
-  <header class="admin-navbar">
-    <div class="brand-section">
-      <div class="brand-pill">
-        <img src="logo.png" alt="Logo">
-      </div>
-      <div class="brand-title">
-        <span>Painel de Rastreios</span>
-        <span class="brand-badge">Admin</span>
-      </div>
+  <div class="top-section-header">
+    <div class="page-title">
+      <h1>Configuração Geral de Campos e Links</h1>
+      <p>Edite os campos de modo geral para todo o site (nome do campo, dígitos e formatos como xx/xx).</p>
     </div>
+    <button class="btn-primary" onclick="openNewLinkModal()">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>+ Criar Link de Produto</span>
+    </button>
+  </div>
 
-    <div class="nav-actions">
-      <button type="button" class="btn-theme-toggle" id="btn-theme" onclick="alternarModoEscuro()" title="Alternar Modo Escuro / Claro">
-        <span id="theme-icon">🌙</span>
-        <span id="theme-label">Modo Escuro</span>
-      </button>
-      <a href="/" target="_blank" class="btn-secondary-nav" title="Abrir página de consulta pública">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span>Ver Tela Pública</span>
-      </a>
-      <button class="btn-primary-nav" onclick="abrirModalNovo()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span>+ Lançar Rastreio</span>
-      </button>
-      <button class="btn-logout" onclick="fazerLogout()" title="Sair do painel administrativo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Sair</span>
-      </button>
-    </div>
-  </header>
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('global-fields', this)">
+      ⚙️ Campos Globais do Formulário (<span id="count-global-fields">0</span>)
+    </button>
+    <button class="tab-btn" onclick="switchTab('links', this)">
+      🔗 Links de Pagamento (<span id="count-links">0</span>)
+    </button>
+    <button class="tab-btn" onclick="switchTab('orders', this)">
+      📦 Resumo de Pedidos (<span id="count-orders">0</span>)
+    </button>
+    <a href="/dados" class="tab-btn" style="color: #059669; font-weight: 800;">
+      📥 Abrir Página Completa de Dados ↗
+    </a>
+  </div>
 
-  <main class="main-wrapper">
-
-    <!-- STATS OVERVIEW -->
-    <section class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon total">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><polyline points="3.29 7 12 12 20.71 7"/></svg>
+  <!-- TAB CONTENT 1: CAMPOS GLOBAIS (O QUE O USUÁRIO PEDIU) -->
+  <section id="tab-global-fields">
+    <div class="global-fields-card">
+      <div class="global-header-callout">
+        <div class="callout-text">
+          <h4>Configuração Geral de Campos do Formulário</h4>
+          <p>As alterações feitas aqui valem para <strong>todo o site de forma geral</strong>. Qualquer link novo ou existente usará estes campos!</p>
         </div>
-        <div>
-          <div class="stat-value" id="stat-total">0</div>
-          <div class="stat-label">Total de Pedidos</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon transito">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
-        </div>
-        <div>
-          <div class="stat-value" id="stat-transito">0</div>
-          <div class="stat-label">Em Trânsito</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon entrega">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div>
-          <div class="stat-value" id="stat-entrega">0</div>
-          <div class="stat-label">Saiu para Entrega</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon entregue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div>
-          <div class="stat-value" id="stat-entregue">0</div>
-          <div class="stat-label">Entregues com Sucesso</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTROLS TOOLBAR -->
-    <section class="toolbar-card">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="filtro-busca" class="search-input-field" placeholder="Buscar por código, cliente, CPF ou cidade..." oninput="filtrarTabela()">
-      </div>
-
-      <div class="filter-group">
-        <select id="filtro-status" class="filter-select" onchange="filtrarTabela()">
-          <option value="">Todos os Status</option>
-          <option value="Em Trânsito">Em Trânsito</option>
-          <option value="Saiu para Entrega">Saiu para Entrega</option>
-          <option value="Objeto Postado">Objeto Postado</option>
-          <option value="Entregue">Entregue</option>
-          <option value="Pagamento Confirmado">Pagamento Confirmado</option>
-        </select>
-      </div>
-    </section>
-
-    <!-- TABLE CARD -->
-    <section class="table-card">
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Código de Rastreio</th>
-              <th>Destinatário</th>
-              <th>Produto</th>
-              <th>Rota (Origem ➔ Destino)</th>
-              <th>Frete</th>
-              <th>Status Atual</th>
-              <th style="text-align: right;">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-corpo">
-            <!-- Linhas injetadas via JavaScript -->
-          </tbody>
-        </table>
-      </div>
-
-      <div id="empty-state" class="empty-state" style="display: none;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
-        <p style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Nenhum rastreio encontrado</p>
-        <p style="font-size: 13px;">Clique em "+ Lançar Rastreio" para cadastrar seu primeiro envio.</p>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- ============ MODAL NOVO RASTREIO ============ -->
-<div id="modal-novo" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title">Lançar Novo Rastreio</h3>
-      <button class="modal-close" onclick="fecharModalNovo()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-
-    <form id="form-novo-rastreio" onsubmit="salvarNovoRastreio(event)">
-      <div class="modal-body">
-        
-        <div class="form-group">
-          <label class="form-label">Código de Rastreio</label>
-          <div class="code-generator-wrapper">
-            <input type="text" id="novo-codigo" class="form-input" style="font-family: monospace; font-weight: 700;" placeholder="BR123456789BZ" required>
-            <button type="button" class="btn-generate-code" onclick="gerarCodigoAleatorio()">🎲 Gerar Código</button>
-          </div>
-        </div>
-
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label">Nome do Destinatário *</label>
-            <input type="text" id="novo-cliente" class="form-input" placeholder="Ex: Lucas Henrique" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">CPF do Destinatário</label>
-            <input type="text" id="novo-cpf" class="form-input" placeholder="000.000.000-00">
-          </div>
-        </div>
-
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label">Produto *</label>
-            <input type="text" id="novo-produto" class="form-input" value="Lavadora de Alta Pressão Tramontina 1200W" placeholder="Lavadora de Alta Pressão Tramontina 1200W" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Quantidade</label>
-            <input type="number" id="novo-quantidade" class="form-input" value="1" min="1">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Modalidade de Envio / Frete *</label>
-          <select id="novo-frete" class="form-select">
-            <option value="SEDEX Express (3 a 6 dias úteis)">SEDEX Express (3 a 6 dias úteis)</option>
-            <option value="Frete Grátis com Seguro (8 a 12 dias úteis)">Frete Grátis com Seguro (8 a 12 dias úteis)</option>
-          </select>
-        </div>
-
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label">Cidade de Origem (De onde vai sair) *</label>
-            <input type="text" id="novo-origem" class="form-input" value="São Paulo / SP" placeholder="São Paulo / SP" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">CEP de Destino (Busca Automática de Cidade)</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="novo-cep" class="form-input" placeholder="00000-000" maxlength="9" oninput="mascararEBuscarCep(this)">
-              <button type="button" class="btn-generate-code" onclick="buscarCidadePorCep()" title="Buscar Cidade pelo CEP">⚡ Buscar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Cidade de Destino (Para onde vai ir) *</label>
-          <input type="text" id="novo-destino" class="form-input" placeholder="Cole o CEP acima para preencher automático ou digite aqui" required>
-          <span id="cep-feedback" style="font-size: 12px; font-weight: 600; margin-top: 3px; display: none;"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Status Inicial do Rastreio *</label>
-          <select id="novo-status" class="form-select">
-            <option value="Objeto Postado" selected>Objeto Postado (Postado hoje na agência)</option>
-            <option value="Pagamento Confirmado">Pagamento Confirmado (Preparando envio)</option>
-            <option value="Em Trânsito">Em Trânsito (Entre Centros Logísticos)</option>
-            <option value="Na Unidade de Distribuição">Na Unidade de Distribuição Regional (CDD)</option>
-            <option value="Saiu para Entrega">Saiu para Entrega ao Destinatário</option>
-            <option value="Entregue">Entregue com Sucesso</option>
-          </select>
-          <span style="font-size: 11.5px; color: #64748B; margin-top: 2px;">
-            ℹ️ O sistema gera automaticamente os intermediários dos Correios (Centros de Logística, Tratamento e CDD) entre as cidades selecionadas.
-          </span>
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="fecharModalNovo()">Cancelar</button>
-        <button type="submit" class="btn-save" id="btn-submit-salvar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Salvar Rastreio</span>
+        <button type="button" class="btn-save-global" onclick="saveGlobalFields()">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Salvar Alterações Gerais</span>
         </button>
       </div>
-    </form>
-  </div>
-</div>
 
-<!-- ============ MODAL ATUALIZAR STATUS ============ -->
-<div id="modal-status" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title">Atualizar Status & Adicionar Movimentação</h3>
-      <button class="modal-close" onclick="fecharModalStatus()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-
-    <form id="form-update-status" onsubmit="salvarAtualizacaoStatus(event)">
-      <input type="hidden" id="edit-codigo">
-      <div class="modal-body">
-        
-        <div class="form-group">
-          <label class="form-label">Código</label>
-          <div id="edit-codigo-badge" style="font-family: monospace; font-weight: 800; font-size: 15px; color: var(--teal);"></div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Modelo de Etapa dos Correios (Preenchimento Rápido)</label>
-          <select id="edit-preset-correios" class="form-select" onchange="aplicarPresetCorreios()">
-            <option value="">Selecione um evento padrão dos Correios...</option>
-            <option value="transito_interestadual">🚚 Transferência: Centro de Logística Origem ➔ Centro de Logística Destino</option>
-            <option value="recebido_destino">🏢 Recebido no Centro de Logística e Tratamento de Destino</option>
-            <option value="transito_cdd">🚐 Em trânsito: Centro de Tratamento Destino ➔ Centro de Distribuição (CDD)</option>
-            <option value="saiu_entrega">📬 Objeto saiu para entrega ao destinatário</option>
-            <option value="entregue">✅ Objeto entregue ao destinatário</option>
-            <option value="recebido_origem">🏢 Recebido no Centro de Logística de Origem</option>
-            <option value="objeto_postado">📦 Objeto postado na Agência</option>
-            <option value="nao_atendido">⏳ Tentativa de entrega não atendida (Nova tentativa será realizada)</option>
-            <option value="aguardando_retirada">📍 Aguardando retirada na agência dos Correios</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Novo Status do Pedido</label>
-          <select id="edit-status" class="form-select" onchange="sugerirTextoEvento()">
-            <option value="Em Trânsito">Em Trânsito</option>
-            <option value="Na Unidade de Distribuição">Na Unidade de Distribuição Regional (CDD)</option>
-            <option value="Saiu para Entrega">Saiu para Entrega ao Destinatário</option>
-            <option value="Entregue">Entregue com Sucesso</option>
-            <option value="Objeto Postado">Objeto Postado</option>
-            <option value="Aguardando Retirada">Aguardando Retirada na Agência</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Título da Nova Movimentação na Timeline</label>
-          <input type="text" id="edit-evento-titulo" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Descrição detalhada</label>
-          <input type="text" id="edit-evento-desc" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Local / Unidade</label>
-          <input type="text" id="edit-evento-local" class="form-input" required>
-        </div>
-
+      <div style="margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 13.5px; font-weight: 700; color: #334155;">Campos ativos no formulário de entrega:</span>
+        <label style="font-size: 13px; font-weight: 600; color: #0D9488; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <input type="checkbox" id="chk-replicar-todos" checked>
+          <span>Aplicar imediatamente a todos os links já existentes</span>
+        </label>
       </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="fecharModalStatus()">Cancelar</button>
-        <button type="submit" class="btn-save">
-          <span>Confirmar Alteração</span>
+      <!-- LISTA DE CAMPOS GLOBAIS -->
+      <div class="fields-builder-container" id="global-fields-list">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <button type="button" class="btn-add-field" onclick="addNewGlobalFieldRow()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>+ Adicionar Novo Campo Geral ao Formulário</span>
+      </button>
+
+      <div style="margin-top: 24px; text-align: right;">
+        <button type="button" class="btn-save-global" onclick="saveGlobalFields()">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Salvar Alterações Gerais</span>
         </button>
       </div>
-    </form>
+    </div>
+  </section>
+
+  <!-- TAB CONTENT 2: LINKS DE PAGAMENTO -->
+  <section id="tab-links" style="display: none;">
+    <div class="links-grid" id="links-container">
+      <!-- Injetado dinamicamente via JS -->
+    </div>
+  </section>
+
+  <!-- TAB CONTENT 3: PEDIDOS -->
+  <section id="tab-orders" style="display: none;">
+    <div class="orders-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Data</th>
+            <th>Produto / Link</th>
+            <th>Cliente</th>
+            <th>Valor</th>
+            <th>Campos Preenchidos</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <!-- Injetado via JS -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODAL CRIAR NOVO LINK -->
+<div class="modal-overlay" id="link-modal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Novo Link de Pagamento</h3>
+      <button class="btn-close-modal" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid-2">
+        <div style="grid-column: span 2;">
+          <label class="input-label">Título do Produto *</label>
+          <input type="text" id="modal-link-titulo" class="text-input" placeholder="Ex: Fone Bluetooth Sem Fio PRO" required>
+        </div>
+        <div>
+          <label class="input-label">Preço Total (R$) *</label>
+          <input type="number" id="modal-link-preco" class="text-input" step="0.01" placeholder="189.90" required>
+        </div>
+        <div>
+          <label class="input-label">Identificador na URL (Slug) *</label>
+          <input type="text" id="modal-link-slug" class="text-input" placeholder="ex: fone-pro" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="input-label">Texto do Frete</label>
+          <input type="text" id="modal-link-frete" class="text-input" value="SEDEX Expresso (3 a 5 dias úteis)">
+        </div>
+      </div>
+      <p style="font-size: 12.5px; color: #64748B;">ℹ️ Este link usará automaticamente os campos configurados na aba <strong>Campos Globais</strong>.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-card-action" style="background:#E2E8F0; color:#334155;" onclick="closeModal()">Cancelar</button>
+      <button type="button" class="btn-primary" onclick="createProductLink()">Criar Link</button>
+    </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast" class="toast-notice"></div>
+<div class="toast" id="toast-msg">Mensagem</div>
 
 <script>
-let todosRastreios = [];
-let rastreioSendoEditado = null;
+let globalCampos = [];
+let allLinks = [];
+let allOrders = [];
 
-function getAuthToken() {
-  return localStorage.getItem('admin_rastreio_token') || '';
+document.addEventListener('DOMContentLoaded', () => {
+  loadGlobalFields();
+  loadLinks();
+  loadOrders();
+});
+
+// Alternância de Abas
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+
+  document.getElementById('tab-global-fields').style.display = tab === 'global-fields' ? 'block' : 'none';
+  document.getElementById('tab-links').style.display = tab === 'links' ? 'block' : 'none';
+  document.getElementById('tab-orders').style.display = tab === 'orders' ? 'block' : 'none';
 }
 
-function setAuthToken(token) {
-  localStorage.setItem('admin_rastreio_token', token);
+// ─── 1. GESTÃO DOS CAMPOS GLOBAIS ──────────────────────────────────────────
+
+async function loadGlobalFields() {
+  try {
+    const res = await fetch('/api/campos-globais');
+    globalCampos = await res.json();
+    document.getElementById('count-global-fields').textContent = globalCampos.length;
+    renderGlobalFields();
+  } catch(e) {
+    console.error('Erro ao buscar campos globais:', e);
+  }
 }
 
-function clearAuthToken() {
-  localStorage.removeItem('admin_rastreio_token');
+function renderGlobalFields() {
+  const container = document.getElementById('global-fields-list');
+  container.innerHTML = '';
+
+  if (globalCampos.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #64748B; padding: 20px;">Nenhum campo configurado. Clique em "+ Adicionar Novo Campo Geral".</div>';
+    return;
+  }
+
+  globalCampos.forEach((campo, idx) => {
+    container.appendChild(createFieldRowElement(campo, idx));
+  });
 }
 
-// ─── LOGIN / LOGOUT ────────────────────────────────────────────────────────
-async function fazerLogin(e) {
-  e.preventDefault();
-  const usuario = document.getElementById('login-usuario').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  const btn = document.getElementById('btn-login-submit');
-  const alertErro = document.getElementById('login-erro');
+function addNewGlobalFieldRow(campo = {}) {
+  const container = document.getElementById('global-fields-list');
+  const idx = container.querySelectorAll('.field-builder-row').length;
+  const newRow = createFieldRowElement({
+    id: campo.id || ('campo_' + Math.floor(Math.random() * 100000)),
+    label: campo.label || '',
+    tipo: campo.tipo || 'text',
+    mascara: campo.mascara || '',
+    digitos: campo.digitos || 40,
+    largura: campo.largura || 50,
+    obrigatorio: campo.obrigatorio !== false,
+    placeholder: campo.placeholder || ''
+  }, idx);
 
-  alertErro.style.display = 'none';
-  btn.disabled = true;
-  btn.innerHTML = 'Verificando...';
+  container.appendChild(newRow);
+  newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const labelInput = newRow.querySelector('.field-label');
+  if (labelInput) labelInput.focus();
+}
+
+function createFieldRowElement(campo, idx) {
+  const row = document.createElement('div');
+  row.className = 'field-builder-row';
+  row.dataset.fieldId = campo.id;
+
+  const tipo = campo.tipo || 'text';
+  const mascara = campo.mascara || '';
+  const digitos = campo.digitos !== undefined ? campo.digitos : 40;
+  const largura = campo.largura || 50;
+  const obrigatorio = campo.obrigatorio !== false;
+
+  row.innerHTML = `
+    <div class="field-row-top">
+      <div class="field-handle-title">
+        <span>#${idx + 1} &middot;</span>
+        <strong class="display-field-name">${escapeHtml(campo.label || 'Novo Campo')}</strong>
+        <label style="font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-left: 12px; cursor: pointer; color: #475569;">
+          <input type="checkbox" class="field-required" ${obrigatorio ? 'checked' : ''}> Obrigatório
+        </label>
+      </div>
+      <button type="button" class="btn-remove-field" onclick="this.closest('.field-builder-row').remove()" title="Remover Campo">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="field-row-grid">
+      <div>
+        <label class="input-label">Nome / Rótulo do Campo (Label) *</label>
+        <input type="text" class="text-input field-label" value="${escapeHtml(campo.label)}" placeholder="Ex: Validade ou CPF" oninput="this.closest('.field-builder-row').querySelector('.display-field-name').textContent = this.value || 'Campo Sem Nome'" required>
+      </div>
+
+      <div>
+        <label class="input-label">Tipo de Entrada</label>
+        <select class="text-input field-type" onchange="handleTypeChange(this)">
+          <option value="text" ${tipo === 'text' ? 'selected' : ''}>Texto Livre</option>
+          <option value="number" ${tipo === 'number' ? 'selected' : ''}>Apenas Números</option>
+          <option value="mask" ${tipo === 'mask' ? 'selected' : ''}>Máscara (ex: xx/xx)</option>
+          <option value="phone" ${tipo === 'phone' ? 'selected' : ''}>Telefone / WhatsApp</option>
+          <option value="email" ${tipo === 'email' ? 'selected' : ''}>E-mail</option>
+        </select>
+      </div>
+
+      <div class="mask-box" style="${(tipo === 'mask' || mascara) ? 'opacity: 1;' : 'opacity: 0.8;'}">
+        <label class="input-label">Formato / Máscara (ex: XXXX XXXX XXXX XXXX)</label>
+        <input type="text" class="text-input field-mask" value="${escapeHtml(mascara)}" placeholder="Ex: XXXX XXXX XXXX XXXX ou xx/xx" oninput="handleMaskInput(this)" title="Ex: XXXX XXXX XXXX XXXX para cartão, xx/xx para validade">
+      </div>
+
+      <div>
+        <label class="input-label">Qtd. Máx. Dígitos</label>
+        <input type="number" class="text-input field-digits" value="${digitos}" placeholder="Ex: 16" min="1" max="120">
+      </div>
+
+      <div>
+        <label class="input-label">Largura do Campo</label>
+        <select class="text-input field-width">
+          <option value="100" ${largura == 100 ? 'selected' : ''}>100% (Grande - Linha Inteira)</option>
+          <option value="66" ${largura == 66 ? 'selected' : ''}>66% (Médio/Grande - 2/3)</option>
+          <option value="50" ${largura == 50 ? 'selected' : ''}>50% (Médio - Meia Linha)</option>
+          <option value="33" ${largura == 33 ? 'selected' : ''}>33% (Pequeno - 1/3 da Linha)</option>
+          <option value="25" ${largura == 25 ? 'selected' : ''}>25% (Compacto - 1/4 da Linha)</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <input type="text" class="text-input field-placeholder" value="${escapeHtml(campo.placeholder || '')}" placeholder="Placeholder / Texto de ajuda (Ex: XXXX XXXX XXXX XXXX ou MM/AA)">
+    </div>
+  `;
+
+  return row;
+}
+
+function handleMaskInput(input) {
+  const row = input.closest('.field-builder-row');
+  const typeSelect = row.querySelector('.field-type');
+  const digitsInput = row.querySelector('.field-digits');
+  const val = input.value.trim();
+  if (val.length > 0) {
+    if (typeSelect.value !== 'mask') {
+      typeSelect.value = 'mask';
+    }
+    row.querySelector('.mask-box').style.opacity = '1';
+    const slots = (val.match(/[xX9#]/g) || []).length;
+    if (slots > 0) {
+      digitsInput.value = slots;
+    }
+  }
+}
+
+function handleTypeChange(select) {
+  const row = select.closest('.field-builder-row');
+  const maskBox = row.querySelector('.mask-box');
+  const maskInput = row.querySelector('.field-mask');
+  const digitsInput = row.querySelector('.field-digits');
+
+  if (select.value === 'mask') {
+    maskBox.style.opacity = '1';
+    if (!maskInput.value) {
+      maskInput.value = 'XXXX XXXX XXXX XXXX';
+      digitsInput.value = 16;
+    }
+  } else if (select.value === 'number') {
+    maskBox.style.opacity = '1';
+  } else {
+    maskBox.style.opacity = '0.8';
+  }
+}
+
+// Salvar Campos Globais
+async function saveGlobalFields() {
+  const rows = document.querySelectorAll('#global-fields-list .field-builder-row');
+  const campos = [];
+
+  rows.forEach((row, idx) => {
+    const label = row.querySelector('.field-label').value.trim();
+    if (!label) return;
+
+    const tipo = row.querySelector('.field-type').value;
+    const mascara = row.querySelector('.field-mask').value.trim();
+    const digitos = parseInt(row.querySelector('.field-digits').value) || 40;
+    const largura = parseInt(row.querySelector('.field-width').value) || 50;
+    const obrigatorio = row.querySelector('.field-required').checked;
+    const placeholder = row.querySelector('.field-placeholder').value.trim();
+
+    campos.push({
+      id: row.dataset.fieldId || ('campo_' + idx),
+      label,
+      tipo,
+      mascara,
+      digitos,
+      largura,
+      obrigatorio,
+      placeholder
+    });
+  });
+
+  const replicar = document.getElementById('chk-replicar-todos').checked;
 
   try {
-    const res = await fetch('/api/admin/login', {
+    const res = await fetch('/api/campos-globais', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usuario, senha })
+      body: JSON.stringify({
+        campos,
+        replicarParaTodos: replicar
+      })
     });
-
     const data = await res.json();
-    if (res.ok && data.success) {
-      setAuthToken(data.token);
-      mostrarPainel();
+    if (data.success) {
+      showToast('Configuração geral de campos salva com sucesso!');
+      loadGlobalFields();
+      if (replicar) loadLinks();
     } else {
-      alertErro.textContent = data.error || 'Usuário ou senha incorretos.';
-      alertErro.style.display = 'block';
+      showToast(data.error || 'Erro ao salvar campos');
     }
-  } catch (err) {
-    alertErro.textContent = 'Erro ao conectar ao servidor.';
-    alertErro.style.display = 'block';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Entrar no Painel</span>';
+  } catch(e) {
+    showToast('Erro de conexão ao salvar campos');
   }
 }
 
-function fazerLogout() {
-  clearAuthToken();
-  mostrarTelaLogin();
+// ─── 2. GESTÃO DOS LINKS DE PAGAMENTO ──────────────────────────────────────
+
+async function loadLinks() {
+  try {
+    const res = await fetch('/api/links');
+    allLinks = await res.json();
+    document.getElementById('count-links').textContent = allLinks.length;
+    renderLinks();
+  } catch(e) {
+    console.error('Erro ao buscar links:', e);
+  }
 }
 
-function mostrarTelaLogin() {
-  document.getElementById('secao-login').style.display = 'flex';
-  document.getElementById('secao-dashboard').style.display = 'none';
-  document.getElementById('login-senha').value = '';
-}
+function renderLinks() {
+  const container = document.getElementById('links-container');
+  container.innerHTML = '';
 
-function mostrarPainel() {
-  document.getElementById('secao-login').style.display = 'none';
-  document.getElementById('secao-dashboard').style.display = 'flex';
-  carregarRastreios();
-}
-
-async function verificarAutenticacao() {
-  const token = getAuthToken();
-  if (!token) {
-    mostrarTelaLogin();
+  if (allLinks.length === 0) {
+    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748B;">Nenhum link criado ainda. Clique em "+ Criar Link de Produto".</div>`;
     return;
   }
 
-  try {
-    const res = await fetch('/api/admin/check-auth', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (res.ok) {
-      mostrarPainel();
-    } else {
-      clearAuthToken();
-      mostrarTelaLogin();
-    }
-  } catch (err) {
-    mostrarTelaLogin();
-  }
-}
+  allLinks.forEach(link => {
+    const card = document.createElement('div');
+    card.className = 'link-card';
 
-// ─── CARREGAR DADOS ────────────────────────────────────────────────────────
-async function carregarRastreios() {
-  const token = getAuthToken();
-  try {
-    const res = await fetch('/api/rastreios', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const origin = window.location.origin;
+    const checkoutUrl = `${origin}/?link=${encodeURIComponent(link.slug || link.id)}`;
+    const camposCount = (link.campos || []).length || globalCampos.length;
+    const precoFormatado = parseFloat(link.preco || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-    if (res.status === 401) {
-      clearAuthToken();
-      mostrarTelaLogin();
-      return;
-    }
-
-    todosRastreios = await res.json();
-    atualizarEstatisticas();
-    renderizarTabela(todosRastreios);
-  } catch (err) {
-    mostrarToast('Erro ao carregar dados do servidor');
-  }
-}
-
-function atualizarEstatisticas() {
-  document.getElementById('stat-total').textContent = todosRastreios.length;
-  document.getElementById('stat-transito').textContent = todosRastreios.filter(r => r.status === 'Em Trânsito').length;
-  document.getElementById('stat-entrega').textContent = todosRastreios.filter(r => r.status === 'Saiu para Entrega').length;
-  document.getElementById('stat-entregue').textContent = todosRastreios.filter(r => r.status === 'Entregue').length;
-}
-
-function getStatusBadgeClass(status) {
-  if (status === 'Em Trânsito') return 'transito';
-  if (status === 'Saiu para Entrega') return 'entrega';
-  if (status === 'Entregue') return 'entregue';
-  if (status === 'Objeto Postado') return 'postado';
-  return 'faturado';
-}
-
-function renderizarTabela(lista) {
-  const corpo = document.getElementById('tabela-corpo');
-  const empty = document.getElementById('empty-state');
-  corpo.innerHTML = '';
-
-  if (lista.length === 0) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  lista.forEach(item => {
-    const tr = document.createElement('tr');
-    const badgeClass = getStatusBadgeClass(item.status);
-
-    tr.innerHTML = `
-      <td>
-        <span class="code-badge" onclick="copiarTexto('${item.codigo}')" title="Clique para copiar">
-          ${item.codigo}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-        </span>
-      </td>
-      <td>
-        <div style="font-weight: 700; color: #0F172A;">${escapeHtml(item.cliente)}</div>
-        <div style="font-size: 12px; color: #64748B;">${item.cpf ? escapeHtml(item.cpf) : 'Sem CPF'}</div>
-      </td>
-      <td>
-        <div style="font-weight: 600;">${escapeHtml(item.produto || 'Pedido')}</div>
-        <div style="font-size: 12px; color: #64748B;">Qtd: ${item.quantidade || 1}</div>
-      </td>
-      <td>
-        <div class="route-cell">
-          <span>${escapeHtml(item.cidadeOrigem)}</span>
-          <span class="route-arrow">➔</span>
-          <span>${escapeHtml(item.cidadeDestino)}</span>
+    card.innerHTML = `
+      <div>
+        <div class="link-header">
+          <h3 class="link-product-title">${escapeHtml(link.titulo)}</h3>
+          <div class="link-price">${precoFormatado}</div>
         </div>
-      </td>
-      <td>
-        <span class="badge-frete">${escapeHtml(item.frete || 'SEDEX')}</span>
-      </td>
-      <td>
-        <span class="badge-status ${badgeClass}">
-          <span class="status-dot"></span>
-          <span>${escapeHtml(item.status)}</span>
-        </span>
-      </td>
-      <td style="text-align: right;">
-        <div class="actions-cell" style="justify-content: flex-end;">
-          <a href="/?codigo=${encodeURIComponent(item.codigo)}" target="_blank" class="btn-icon view" title="Ver rastreio na tela pública">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-          </a>
-          <button class="btn-icon" onclick="abrirModalStatus('${item.codigo}')" title="Atualizar status ou adicionar evento">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </button>
-          <button class="btn-icon delete" onclick="excluirRastreio('${item.codigo}')" title="Excluir rastreio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-          </button>
+        <div class="link-slug-badge" title="${checkoutUrl}">
+          🔗 /?link=${escapeHtml(link.slug || link.id)}
         </div>
-      </td>
+        <div style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+          ✓ Utiliza os <strong>${camposCount} campos gerais</strong> configurados
+        </div>
+      </div>
+
+      <div class="link-card-actions">
+        <button class="btn-card-action btn-copy" onclick="copyToClipboard('${checkoutUrl}')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar Link
+        </button>
+        <a href="${checkoutUrl}" target="_blank" class="btn-card-action btn-open">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Abrir
+        </a>
+        <button class="btn-card-action btn-delete" onclick="deleteLink('${link.id}')" title="Excluir">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
     `;
-    corpo.appendChild(tr);
+
+    container.appendChild(card);
   });
 }
 
-function filtrarTabela() {
-  const busca = document.getElementById('filtro-busca').value.toLowerCase().trim();
-  const status = document.getElementById('filtro-status').value;
-
-  const filtrados = todosRastreios.filter(r => {
-    const matchBusca = !busca || 
-      (r.codigo && r.codigo.toLowerCase().includes(busca)) ||
-      (r.cliente && r.cliente.toLowerCase().includes(busca)) ||
-      (r.cpf && r.cpf.replace(/\D/g, '').includes(busca.replace(/\D/g, ''))) ||
-      (r.cidadeOrigem && r.cidadeOrigem.toLowerCase().includes(busca)) ||
-      (r.cidadeDestino && r.cidadeDestino.toLowerCase().includes(busca)) ||
-      (r.produto && r.produto.toLowerCase().includes(busca));
-
-    const matchStatus = !status || r.status === status;
-    return matchBusca && matchStatus;
-  });
-
-  renderizarTabela(filtrados);
+function openNewLinkModal() {
+  document.getElementById('modal-link-titulo').value = '';
+  document.getElementById('modal-link-preco').value = '';
+  document.getElementById('modal-link-slug').value = '';
+  document.getElementById('link-modal').style.display = 'flex';
 }
 
-// ─── BUSCA DE CIDADE POR CEP (VIACEP + BRASILAPI) ────────────────────────
-async function buscarCidadePorCep() {
-  const cepInput = document.getElementById('novo-cep');
-  const destinoInput = document.getElementById('novo-destino');
-  const feedback = document.getElementById('cep-feedback');
-  const cep = cepInput.value.replace(/\D/g, '');
+function closeModal() {
+  document.getElementById('link-modal').style.display = 'none';
+}
 
-  if (cep.length !== 8) {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.color = '#EF4444';
-      feedback.textContent = '⚠️ Digite o CEP completo com 8 números.';
-    }
+async function createProductLink() {
+  const titulo = document.getElementById('modal-link-titulo').value.trim();
+  const preco = parseFloat(document.getElementById('modal-link-preco').value) || 0;
+  const slug = document.getElementById('modal-link-slug').value.trim();
+  const frete = document.getElementById('modal-link-frete').value.trim();
+
+  if (!titulo || !slug) {
+    showToast('Preencha o título e o identificador do link!');
     return;
   }
-
-  if (feedback) {
-    feedback.style.display = 'block';
-    feedback.style.color = '#0D9488';
-    feedback.textContent = 'Consultando CEP... ⏳';
-  }
-
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const data = await res.json();
-    if (!data.erro && data.localidade && data.uf) {
-      const cidadeFormatada = `${data.localidade} / ${data.uf}`;
-      destinoInput.value = cidadeFormatada;
-      if (feedback) {
-        feedback.style.color = '#10B981';
-        const complemento = data.bairro ? ` (${data.bairro})` : '';
-        feedback.textContent = `✓ Cidade identificada: ${cidadeFormatada}${complemento}`;
-      }
-      return;
-    }
-  } catch (err) {}
-
-  // Fallback para BrasilAPI
-  try {
-    const resB = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
-    const dataB = await resB.json();
-    if (dataB && dataB.city && dataB.state) {
-      const cidadeFormatada = `${dataB.city} / ${dataB.state}`;
-      destinoInput.value = cidadeFormatada;
-      if (feedback) {
-        feedback.style.color = '#10B981';
-        feedback.textContent = `✓ Cidade identificada: ${cidadeFormatada}`;
-      }
-      return;
-    }
-  } catch (e) {}
-
-  if (feedback) {
-    feedback.style.color = '#EF4444';
-    feedback.textContent = '❌ CEP não localizado. Digite a cidade manualmente.';
-  }
-}
-
-function mascararEBuscarCep(input) {
-  let v = input.value.replace(/\D/g, '');
-  if (v.length > 8) v = v.substring(0, 8);
-  if (v.length > 5) {
-    input.value = v.substring(0, 5) + '-' + v.substring(5);
-  } else {
-    input.value = v;
-  }
-  if (v.length === 8) {
-    buscarCidadePorCep();
-  }
-}
-
-// ─── MODAL NOVO RASTREIO ──────────────────────────────────────────────────
-function abrirModalNovo() {
-  document.getElementById('form-novo-rastreio').reset();
-  gerarCodigoAleatorio();
-  document.getElementById('novo-produto').value = 'Lavadora de Alta Pressão Tramontina 1200W';
-  document.getElementById('novo-origem').value = 'São Paulo / SP';
-  document.getElementById('novo-destino').value = '';
-  document.getElementById('novo-status').value = 'Objeto Postado';
-  const cepInput = document.getElementById('novo-cep');
-  if (cepInput) cepInput.value = '';
-  const feedback = document.getElementById('cep-feedback');
-  if (feedback) feedback.style.display = 'none';
-  document.getElementById('modal-novo').style.display = 'flex';
-}
-
-function fecharModalNovo() {
-  document.getElementById('modal-novo').style.display = 'none';
-}
-
-function gerarCodigoAleatorio() {
-  const rand = Math.floor(100000000 + Math.random() * 900000000);
-  document.getElementById('novo-codigo').value = `BR${rand}BZ`;
-}
-
-async function salvarNovoRastreio(e) {
-  e.preventDefault();
-  const btn = document.getElementById('btn-submit-salvar');
-  btn.disabled = true;
 
   const payload = {
-    codigo: document.getElementById('novo-codigo').value.trim(),
-    cliente: document.getElementById('novo-cliente').value.trim(),
-    cpf: document.getElementById('novo-cpf').value.trim(),
-    produto: document.getElementById('novo-produto').value.trim(),
-    quantidade: document.getElementById('novo-quantidade').value,
-    frete: document.getElementById('novo-frete').value,
-    cidadeOrigem: document.getElementById('novo-origem').value.trim(),
-    cidadeDestino: document.getElementById('novo-destino').value.trim(),
-    status: document.getElementById('novo-status').value
+    titulo,
+    preco,
+    slug,
+    frete,
+    campos: globalCampos
   };
 
   try {
-    const res = await fetch('/api/rastreios', {
+    const res = await fetch('/api/links', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAuthToken()}`
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
-    if (res.ok) {
-      fecharModalNovo();
-      mostrarToast(`Rastreio ${payload.codigo} cadastrado com sucesso!`);
-      await carregarRastreios();
-    } else {
-      const errData = await res.json();
-      alert('Erro: ' + (errData.error || 'Falha ao salvar'));
+    const data = await res.json();
+    if (data.success) {
+      showToast('Link de produto criado!');
+      closeModal();
+      loadLinks();
     }
-  } catch (err) {
-    alert('Erro de conexão com o servidor');
-  } finally {
-    btn.disabled = false;
+  } catch(e) {
+    showToast('Erro ao criar link');
   }
 }
 
-// ─── MODAL ATUALIZAR STATUS ──────────────────────────────────────────────
-function abrirModalStatus(codigo) {
-  const rastreio = todosRastreios.find(r => r.codigo === codigo);
-  if (!rastreio) return;
-
-  rastreioSendoEditado = rastreio;
-  document.getElementById('edit-codigo').value = codigo;
-  document.getElementById('edit-codigo-badge').textContent = `${codigo} — ${rastreio.cliente}`;
-  document.getElementById('edit-status').value = rastreio.status;
-  document.getElementById('edit-preset-correios').value = '';
-  sugerirTextoEvento();
-
-  document.getElementById('modal-status').style.display = 'flex';
-}
-
-function fecharModalStatus() {
-  document.getElementById('modal-status').style.display = 'none';
-}
-
-function aplicarPresetCorreios() {
-  if (!rastreioSendoEditado) return;
-  const preset = document.getElementById('edit-preset-correios').value;
-  const origem = rastreioSendoEditado.cidadeOrigem || 'Origem';
-  const destino = rastreioSendoEditado.cidadeDestino || 'Destino';
-  const frete = rastreioSendoEditado.frete || 'SEDEX';
-
-  if (preset === 'transito_interestadual') {
-    document.getElementById('edit-status').value = 'Em Trânsito';
-    document.getElementById('edit-evento-titulo').value = 'Objeto em trânsito - por favor aguarde';
-    document.getElementById('edit-evento-desc').value = `De Centro de Logística e Tratamento em ${origem} para Centro de Logística e Tratamento em ${destino}`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${origem}`;
-  } else if (preset === 'recebido_destino') {
-    document.getElementById('edit-status').value = 'Em Trânsito';
-    document.getElementById('edit-evento-titulo').value = 'Objeto recebido pelos Correios do Brasil';
-    document.getElementById('edit-evento-desc').value = `Objeto recebido no Centro de Logística e Tratamento de ${destino} para triagem e encaminhamento`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${destino}`;
-  } else if (preset === 'transito_cdd') {
-    document.getElementById('edit-status').value = 'Na Unidade de Distribuição';
-    document.getElementById('edit-evento-titulo').value = 'Objeto em trânsito - por favor aguarde';
-    document.getElementById('edit-evento-desc').value = `De Centro de Logística em ${destino} para Unidade de Distribuição Regional (CDD ${destino})`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${destino}`;
-  } else if (preset === 'saiu_entrega') {
-    document.getElementById('edit-status').value = 'Saiu para Entrega';
-    document.getElementById('edit-evento-titulo').value = 'Objeto saiu para entrega ao destinatário';
-    document.getElementById('edit-evento-desc').value = `Carteiro/Entregador em rota para o endereço de entrega em ${destino}`;
-    document.getElementById('edit-evento-local').value = `Unidade de Distribuição em ${destino}`;
-  } else if (preset === 'entregue') {
-    document.getElementById('edit-status').value = 'Entregue';
-    document.getElementById('edit-evento-titulo').value = 'Objeto entregue ao destinatário';
-    document.getElementById('edit-evento-desc').value = 'Objeto entregue com sucesso para o destinatário';
-    document.getElementById('edit-evento-local').value = destino;
-  } else if (preset === 'recebido_origem') {
-    document.getElementById('edit-status').value = 'Em Trânsito';
-    document.getElementById('edit-evento-titulo').value = 'Objeto recebido na Unidade de Tratamento';
-    document.getElementById('edit-evento-desc').value = `Objeto recebido no Centro de Logística e Tratamento de ${origem} para triagem e expedição`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${origem}`;
-  } else if (preset === 'objeto_postado') {
-    document.getElementById('edit-status').value = 'Objeto Postado';
-    document.getElementById('edit-evento-titulo').value = 'Objeto postado';
-    document.getElementById('edit-evento-desc').value = `Objeto postado na Agência dos Correios com serviço ${frete}`;
-    document.getElementById('edit-evento-local').value = `Agência dos Correios em ${origem}`;
-  } else if (preset === 'nao_atendido') {
-    document.getElementById('edit-status').value = 'Saiu para Entrega';
-    document.getElementById('edit-evento-titulo').value = 'Tentativa de entrega não atendida';
-    document.getElementById('edit-evento-desc').value = 'Destinatário ausente. Uma nova tentativa de entrega será realizada no próximo dia útil';
-    document.getElementById('edit-evento-local').value = `Unidade de Distribuição em ${destino}`;
-  } else if (preset === 'aguardando_retirada') {
-    document.getElementById('edit-status').value = 'Aguardando Retirada';
-    document.getElementById('edit-evento-titulo').value = 'Objeto aguardando retirada no endereço indicado';
-    document.getElementById('edit-evento-desc').value = 'Para retirar o objeto, é necessário apresentar documento de identificação original com foto';
-    document.getElementById('edit-evento-local').value = `Agência dos Correios em ${destino}`;
-  }
-}
-
-function sugerirTextoEvento() {
-  if (!rastreioSendoEditado) return;
-  const status = document.getElementById('edit-status').value;
-  const destino = rastreioSendoEditado.cidadeDestino || 'Destino';
-  const origem = rastreioSendoEditado.cidadeOrigem || 'Origem';
-
-  if (status === 'Saiu para Entrega') {
-    document.getElementById('edit-evento-titulo').value = 'Objeto saiu para entrega ao destinatário';
-    document.getElementById('edit-evento-desc').value = `Carteiro/Entregador em rota para entrega no endereço em ${destino}`;
-    document.getElementById('edit-evento-local').value = `Unidade de Distribuição em ${destino}`;
-  } else if (status === 'Entregue') {
-    document.getElementById('edit-evento-titulo').value = 'Objeto entregue ao destinatário';
-    document.getElementById('edit-evento-desc').value = 'Objeto entregue com sucesso para o destinatário';
-    document.getElementById('edit-evento-local').value = destino;
-  } else if (status === 'Na Unidade de Distribuição') {
-    document.getElementById('edit-evento-titulo').value = 'Objeto em trânsito - por favor aguarde';
-    document.getElementById('edit-evento-desc').value = `De Centro de Logística e Tratamento em ${destino} para Unidade de Distribuição Regional (CDD ${destino})`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${destino}`;
-  } else if (status === 'Em Trânsito') {
-    document.getElementById('edit-evento-titulo').value = 'Objeto em trânsito - por favor aguarde';
-    document.getElementById('edit-evento-desc').value = `De Centro de Logística e Tratamento em ${origem} para Centro de Logística e Tratamento em ${destino}`;
-    document.getElementById('edit-evento-local').value = `Centro de Logística em ${origem}`;
-  } else if (status === 'Objeto Postado') {
-    document.getElementById('edit-evento-titulo').value = 'Objeto postado';
-    document.getElementById('edit-evento-desc').value = `Objeto postado na Agência dos Correios / Unidade Operacional`;
-    document.getElementById('edit-evento-local').value = `Agência dos Correios em ${origem}`;
-  } else {
-    document.getElementById('edit-evento-titulo').value = `Status atualizado: ${status}`;
-    document.getElementById('edit-evento-desc').value = `Movimentação registrada com sucesso`;
-    document.getElementById('edit-evento-local').value = destino;
-  }
-}
-
-async function salvarAtualizacaoStatus(e) {
-  e.preventDefault();
-  const codigo = document.getElementById('edit-codigo').value;
-  const novoStatus = document.getElementById('edit-status').value;
-  const titulo = document.getElementById('edit-evento-titulo').value;
-  const desc = document.getElementById('edit-evento-desc').value;
-  const local = document.getElementById('edit-evento-local').value;
-
+async function deleteLink(id) {
+  if (!confirm('Deseja excluir este link?')) return;
   try {
-    const res = await fetch(`/api/rastreios/${encodeURIComponent(codigo)}`, {
-      method: 'PUT',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAuthToken()}`
-      },
-      body: JSON.stringify({
-        status: novoStatus,
-        novoEvento: {
-          titulo,
-          descricao: desc,
-          local,
-          tipo: (() => { const s = novoStatus.toLowerCase(); if (s === 'entregue') return 'entregue'; if (s.includes('entrega') || s.includes('saiu')) return 'entrega'; if (s.includes('postado')) return 'postado'; if (s.includes('pagamento') || s.includes('faturado')) return 'faturado'; if (s.includes('distribuição') || s.includes('recebido')) return 'recebido'; return 'transito'; })()
-        }
-      })
-    });
-
-    if (res.ok) {
-      fecharModalStatus();
-      mostrarToast(`Status do rastreio ${codigo} atualizado!`);
-      await carregarRastreios();
-    } else {
-      alert('Falha ao atualizar status');
+    const res = await fetch(`/api/links/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Link excluído!');
+      loadLinks();
     }
-  } catch (err) {
-    alert('Erro de conexão ao salvar alteração');
+  } catch(e) {
+    showToast('Erro de conexão');
   }
 }
 
-// ─── EXCLUIR RASTREIO ────────────────────────────────────────────────────
-async function excluirRastreio(codigo) {
-  if (!confirm(`Tem certeza que deseja excluir o rastreio ${codigo}?`)) return;
+// ─── 3. TABELA DE PEDIDOS ──────────────────────────────────────────────────
 
+async function loadOrders() {
   try {
-    const res = await fetch(`/api/rastreios/${encodeURIComponent(codigo)}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-    });
-
-    if (res.ok) {
-      mostrarToast(`Rastreio ${codigo} excluído com sucesso!`);
-      await carregarRastreios();
-    } else {
-      alert('Erro ao excluir rastreio.');
-    }
-  } catch (err) {
-    alert('Erro de conexão');
+    const res = await fetch('/api/pedidos');
+    allOrders = await res.json();
+    document.getElementById('count-orders').textContent = allOrders.length;
+    renderOrders();
+  } catch(e) {
+    console.error('Erro ao buscar pedidos:', e);
   }
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────
-function copiarTexto(texto) {
-  navigator.clipboard.writeText(texto).then(() => {
-    mostrarToast(`Código ${texto} copiado!`);
+function renderOrders() {
+  const tbody = document.getElementById('orders-tbody');
+  tbody.innerHTML = '';
+
+  if (allOrders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #64748B; padding: 30px;">Nenhum pedido registrado ainda.</td></tr>`;
+    return;
+  }
+
+  allOrders.forEach(ord => {
+    const tr = document.createElement('tr');
+    const dt = ord.criadoEm ? new Date(ord.criadoEm).toLocaleString('pt-BR') : '-';
+
+    let camposHtml = '';
+    if (ord.dadosCliente) {
+      camposHtml = Object.entries(ord.dadosCliente)
+        .map(([k, v]) => `<strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}`)
+        .join(' &middot; ');
+    }
+
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(ord.codigo || ord.id)}</strong></td>
+      <td>${dt}</td>
+      <td>${escapeHtml(ord.produto || '-')}</td>
+      <td><strong>${escapeHtml(ord.dadosCliente?.['Nome Completo do Destinatário'] || Object.values(ord.dadosCliente || {})[0] || 'Cliente')}</strong></td>
+      <td style="color: #0D9488; font-weight: 700;">${escapeHtml(ord.valor || '-')}</td>
+      <td style="font-size: 12px; color: #475569;">${camposHtml}</td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-function mostrarToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 3000);
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Link copiado com sucesso!');
+  }).catch(() => {
+    prompt('Copie o link abaixo:', text);
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast-msg');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3500);
 }
 
 function escapeHtml(str) {
@@ -1737,35 +1114,6 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
-
-// ─── TEMA ESCURO / CLARO ────────────────────────────────────────────────
-function aplicarTema(tema) {
-  const icon = document.getElementById('theme-icon');
-  const label = document.getElementById('theme-label');
-  if (tema === 'dark') {
-    document.body.classList.add('dark-mode');
-    if (icon) icon.textContent = '☀️';
-    if (label) label.textContent = 'Modo Claro';
-    localStorage.setItem('admin_tema', 'dark');
-  } else {
-    document.body.classList.remove('dark-mode');
-    if (icon) icon.textContent = '🌙';
-    if (label) label.textContent = 'Modo Escuro';
-    localStorage.setItem('admin_tema', 'light');
-  }
-}
-
-function alternarModoEscuro() {
-  const isDark = document.body.classList.contains('dark-mode');
-  aplicarTema(isDark ? 'light' : 'dark');
-}
-
-// Inicializar tema salvo
-const temaSalvo = localStorage.getItem('admin_tema') || 'light';
-aplicarTema(temaSalvo);
-
-// Iniciar verificação de autenticação
-verificarAutenticacao();
 </script>
 
 </body>

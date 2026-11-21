@@ -1,15 +1,15 @@
 {
-  "name": "portal-rastreio",
+  "name": "pagamento-via-cartao",
   "version": "1.0.0",
-  "description": "Site exclusivo para rastreamento de pedidos em tempo real",
+  "description": "Sistema de Pagamento e Checkout com Painel Admin e Visualizador de Dados",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "keywords": [
-    "rastreio",
-    "tracking",
-    "correios"
+    "checkout",
+    "pagamento",
+    "admin"
   ],
   "author": "",
   "license": "ISC"

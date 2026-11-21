@@ -9,6 +9,18 @@
     {
       "source": "/admin",
       "destination": "/admin.html"
+    },
+    {
+      "source": "/dados",
+      "destination": "/dados.html"
+    },
+    {
+      "source": "/link/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/p/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

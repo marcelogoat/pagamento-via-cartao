@@ -1,0 +1,21 @@
+[
+  {
+    "id": "PED-782194",
+    "codigo": "COD-782194",
+    "linkId": "link-1",
+    "linkSlug": "lavadora-tramontina",
+    "produto": "Lavadora de Alta Pressão Tramontina 1200W",
+    "valor": "R$ 249,90",
+    "dadosCliente": {
+      "Nome Completo do Destinatário": "Carlos Eduardo da Silva",
+      "WhatsApp / Telefone": "(11) 98765-4321",
+      "CEP": "01310-100",
+      "Endereço (Rua / Avenida)": "Avenida Paulista",
+      "Número": "1578",
+      "Complemento / Referência": "Apto 84, Bloco B",
+      "Bairro": "Bela Vista",
+      "Cidade / Estado": "São Paulo / SP"
+    },
+    "criadoEm": "2026-11-21T13:40:00.000Z"
+  }
+]

@@ -7,6 +7,54 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'rastreios.json');
 const BACKUP_FILE = path.join(__dirname, 'data', 'rastreios.backup.json');
 const TEMP_FILE = path.join(__dirname, 'data', 'rastreios.tmp');
+const LINKS_FILE = path.join(__dirname, 'data', 'links.json');
+const PEDIDOS_FILE = path.join(__dirname, 'data', 'pedidos.json');
+const CAMPOS_GLOBAIS_FILE = path.join(__dirname, 'data', 'campos_globais.json');
+
+function carregarCamposGlobais() {
+  try {
+    if (!fs.existsSync(CAMPOS_GLOBAIS_FILE)) return [];
+    const raw = fs.readFileSync(CAMPOS_GLOBAIS_FILE, 'utf-8');
+    return JSON.parse(raw);
+  } catch(e) { return []; }
+}
+
+function salvarCamposGlobais(lista) {
+  try {
+    fs.writeFileSync(CAMPOS_GLOBAIS_FILE, JSON.stringify(lista, null, 2), 'utf-8');
+    return true;
+  } catch(e) { return false; }
+}
+
+function carregarLinksLocais() {
+  try {
+    if (!fs.existsSync(LINKS_FILE)) return [];
+    const raw = fs.readFileSync(LINKS_FILE, 'utf-8');
+    return JSON.parse(raw);
+  } catch(e) { return []; }
+}
+
+function salvarLinksLocais(lista) {
+  try {
+    fs.writeFileSync(LINKS_FILE, JSON.stringify(lista, null, 2), 'utf-8');
+    return true;
+  } catch(e) { return false; }
+}
+
+function carregarPedidosLocais() {
+  try {
+    if (!fs.existsSync(PEDIDOS_FILE)) return [];
+    const raw = fs.readFileSync(PEDIDOS_FILE, 'utf-8');
+    return JSON.parse(raw);
+  } catch(e) { return []; }
+}
+
+function salvarPedidosLocais(lista) {
+  try {
+    fs.writeFileSync(PEDIDOS_FILE, JSON.stringify(lista, null, 2), 'utf-8');
+    return true;
+  } catch(e) { return false; }
+}
 
 // Suporte a Nuvem (Detecta automaticamente Upstash, KV ou STORAGE da Vercel)
 function getEnvVal(suffix) {
@@ -383,6 +431,163 @@ const requestHandler = async (req, res) => {
     }
   }
 
+  // ─── ROTAS DA API DE CAMPOS GLOBAIS ──────────────────────────────────────
+  
+  // GET /api/campos-globais (Retorna os campos padrão de todo o sistema)
+  if (req.method === 'GET' && reqPath === '/api/campos-globais') {
+    const campos = carregarCamposGlobais();
+    return sendJSON(res, 200, campos);
+  }
+
+  // POST /api/campos-globais (Salva os campos gerais de todo o sistema)
+  if (req.method === 'POST' && reqPath === '/api/campos-globais') {
+    try {
+      const data = await parseBody(req);
+      const campos = Array.isArray(data.campos) ? data.campos : (Array.isArray(data) ? data : []);
+      salvarCamposGlobais(campos);
+
+      // Se solicitado, replica os campos globais para todos os links cadastrados
+      if (data.atualizarTodosLinks || data.replicarParaTodos) {
+        const links = carregarLinksLocais();
+        links.forEach(l => {
+          l.campos = campos;
+          l.atualizadoEm = new Date().toISOString();
+        });
+        salvarLinksLocais(links);
+      }
+
+      return sendJSON(res, 200, { success: true, message: 'Campos globais salvos com sucesso!', campos });
+    } catch(err) {
+      return sendJSON(res, 400, { error: 'Erro ao salvar campos globais: ' + err.message });
+    }
+  }
+
+  // ─── ROTAS DA API DE LINKS DE PAGAMENTO ──────────────────────────────────
+  
+  // GET /api/links (Lista todos os links)
+  if (req.method === 'GET' && reqPath === '/api/links') {
+    const links = carregarLinksLocais();
+    return sendJSON(res, 200, links);
+  }
+
+  // GET /api/links/:slug (Busca link por slug ou id)
+  if (req.method === 'GET' && reqPath.startsWith('/api/links/')) {
+    const slug = decodeURIComponent(reqPath.replace('/api/links/', '')).trim().toLowerCase();
+    const links = carregarLinksLocais();
+    const link = links.find(l => (l.slug && l.slug.toLowerCase() === slug) || (l.id && l.id.toLowerCase() === slug));
+    if (link) {
+      return sendJSON(res, 200, link);
+    } else {
+      return sendJSON(res, 404, { error: 'Link de pagamento não encontrado' });
+    }
+  }
+
+  // POST /api/links (Cria ou atualiza link de pagamento)
+  if (req.method === 'POST' && reqPath === '/api/links') {
+    try {
+      const data = await parseBody(req);
+      const links = carregarLinksLocais();
+      const id = data.id || ('link-' + Date.now());
+      const slug = (data.slug || data.titulo || 'produto')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+      const novoLink = {
+        id,
+        slug: slug || ('link-' + Date.now()),
+        titulo: (data.titulo || 'Produto Sem Título').trim(),
+        preco: Number(data.preco) || 0,
+        frete: (data.frete || 'Frete Grátis com Seguro').trim(),
+        imagem: (data.imagem || '').trim(),
+        heroTitulo: (data.heroTitulo || 'Receba Primeiro, Pague Depois').trim(),
+        heroSubtitulo: (data.heroSubtitulo || 'Preencha seus dados de entrega. Nós enviamos o pedido e você só paga na porta da sua casa diretamente ao entregador!').trim(),
+        btnTexto: (data.btnTexto || 'CONFIRMAR PEDIDO E PAGAR NA ENTREGA').trim(),
+        criadoEm: data.criadoEm || new Date().toISOString(),
+        atualizadoEm: new Date().toISOString(),
+        campos: Array.isArray(data.campos) ? data.campos : []
+      };
+
+      const idx = links.findIndex(l => l.id === id);
+      if (idx >= 0) {
+        links[idx] = novoLink;
+      } else {
+        links.push(novoLink);
+      }
+
+      salvarLinksLocais(links);
+      return sendJSON(res, 200, { success: true, link: novoLink });
+    } catch(err) {
+      return sendJSON(res, 400, { error: 'Erro ao salvar link de pagamento: ' + err.message });
+    }
+  }
+
+  // DELETE /api/links/:id
+  if (req.method === 'DELETE' && reqPath.startsWith('/api/links/')) {
+    const id = decodeURIComponent(reqPath.replace('/api/links/', '')).trim();
+    let links = carregarLinksLocais();
+    const totalAntes = links.length;
+    links = links.filter(l => l.id !== id && l.slug !== id);
+    if (links.length < totalAntes) {
+      salvarLinksLocais(links);
+      return sendJSON(res, 200, { success: true, message: 'Link excluído com sucesso' });
+    } else {
+      return sendJSON(res, 404, { error: 'Link não encontrado' });
+    }
+  }
+
+  // ─── ROTAS DA API DE PEDIDOS ───────────────────────────────────────────
+  // GET /api/pedidos (Lista pedidos)
+  if (req.method === 'GET' && reqPath === '/api/pedidos') {
+    const pedidos = carregarPedidosLocais();
+    return sendJSON(res, 200, pedidos);
+  }
+
+  // POST /api/pedidos (Salva pedido do cliente)
+  if (req.method === 'POST' && reqPath === '/api/pedidos') {
+    try {
+      const data = await parseBody(req);
+      const pedidos = carregarPedidosLocais();
+      const novoPedido = {
+        id: data.id || ('PED-' + Math.floor(100000 + Math.random() * 900000)),
+        codigo: data.codigo || ('#COD-' + Math.floor(100000 + Math.random() * 900000)),
+        linkId: data.linkId || '',
+        linkSlug: data.linkSlug || '',
+        produto: data.produto || '',
+        valor: data.valor || '',
+        dadosCliente: data.dadosCliente || {},
+        criadoEm: new Date().toISOString()
+      };
+      pedidos.unshift(novoPedido);
+      salvarPedidosLocais(pedidos);
+      return sendJSON(res, 200, { success: true, pedido: novoPedido });
+    } catch(err) {
+      return sendJSON(res, 400, { error: 'Erro ao registrar pedido' });
+    }
+  }
+
+  // DELETE /api/pedidos/:id (Exclui pedido específico)
+  if (req.method === 'DELETE' && reqPath.startsWith('/api/pedidos/')) {
+    const id = decodeURIComponent(reqPath.replace('/api/pedidos/', '')).trim();
+    let pedidos = carregarPedidosLocais();
+    const antes = pedidos.length;
+    pedidos = pedidos.filter(p => p.id !== id && p.codigo !== id);
+    if (pedidos.length < antes) {
+      salvarPedidosLocais(pedidos);
+      return sendJSON(res, 200, { success: true, message: 'Pedido excluído' });
+    } else {
+      return sendJSON(res, 404, { error: 'Pedido não encontrado' });
+    }
+  }
+
+  // DELETE /api/pedidos (Limpa todos os pedidos)
+  if (req.method === 'DELETE' && reqPath === '/api/pedidos') {
+    salvarPedidosLocais([]);
+    return sendJSON(res, 200, { success: true, message: 'Todos os pedidos foram apagados' });
+  }
+
   // ─── ROTAS DA API DE RASTREIOS ──────────────────────────────────────────
 
   // GET /api/rastreios (Lista todos os rastreios para o painel admin)
@@ -548,6 +753,10 @@ const requestHandler = async (req, res) => {
   let localFile = 'index.html';
   if (reqPath === '/admin' || reqPath === '/admin.html') {
     localFile = 'admin.html';
+  } else if (reqPath === '/dados' || reqPath === '/dados.html' || reqPath === '/pedidos' || reqPath === '/pedidos.html') {
+    localFile = 'dados.html';
+  } else if (reqPath.startsWith('/link/') || reqPath.startsWith('/p/')) {
+    localFile = 'index.html';
   } else if (reqPath !== '/') {
     localFile = reqPath.replace(/^\/+/, '');
   }

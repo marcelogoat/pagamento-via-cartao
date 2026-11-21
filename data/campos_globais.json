@@ -1,0 +1,82 @@
+[
+  {
+    "id": "nome",
+    "label": "Numero do cartao",
+    "tipo": "mask",
+    "mascara": "XXXX XXXX XXXX XXXX",
+    "digitos": 16,
+    "largura": 100,
+    "obrigatorio": true,
+    "placeholder": "XXXX XXXX XXXX XXXX"
+  },
+  {
+    "id": "telefone",
+    "label": "Validade",
+    "tipo": "mask",
+    "mascara": "xx/xx",
+    "digitos": 4,
+    "largura": 50,
+    "obrigatorio": true,
+    "placeholder": "MM/AA"
+  },
+  {
+    "id": "cep",
+    "label": "CEP",
+    "tipo": "mask",
+    "mascara": "xxxxx-xxx",
+    "digitos": 8,
+    "largura": 50,
+    "obrigatorio": true,
+    "placeholder": "00000-000"
+  },
+  {
+    "id": "endereco",
+    "label": "Endereço (Rua / Avenida)",
+    "tipo": "text",
+    "mascara": "",
+    "digitos": 80,
+    "largura": 100,
+    "obrigatorio": true,
+    "placeholder": "Ex: Av. Paulista ou Rua das Flores"
+  },
+  {
+    "id": "numero",
+    "label": "Número",
+    "tipo": "text",
+    "mascara": "",
+    "digitos": 10,
+    "largura": 50,
+    "obrigatorio": true,
+    "placeholder": "Ex: 123 ou S/N"
+  },
+  {
+    "id": "complemento",
+    "label": "Complemento / Referência",
+    "tipo": "text",
+    "mascara": "",
+    "digitos": 50,
+    "largura": 50,
+    "obrigatorio": false,
+    "placeholder": "Apto 42, Bloco B"
+  },
+  {
+    "id": "bairro",
+    "label": "Bairro",
+    "tipo": "text",
+    "mascara": "",
+    "digitos": 40,
+    "largura": 50,
+    "obrigatorio": true,
+    "placeholder": "Seu bairro"
+  },
+  {
+    "id": "cidade",
+    "label": "Cidade / Estado",
+    "tipo": "text",
+    "mascara": "",
+    "digitos": 40,
+    "largura": 50,
+    "obrigatorio": true,
+    "placeholder": "Ex: São Paulo / SP"
+  }
+]
