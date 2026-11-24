@@ -1074,26 +1074,11 @@ function renderLinks() {
   });
 }
 
-// Gera a URL do checkout: codifica a configuração de modo que funcione em qualquer lugar sem banco de dados!
+// Gera a URL limpa e profissional do checkout (ex: https://site.com/?link=lavadora)
 function gerarCheckoutUrl(link) {
   const origem = window.location.origin;
-  const config = {
-    id:            link.id,
-    slug:          link.slug,
-    titulo:        link.titulo,
-    preco:         link.preco,
-    frete:         link.frete,
-    btnTexto:      link.btnTexto || 'REALIZAR PAGAMENTO',
-    heroTitulo:    link.heroTitulo || 'Receba Primeiro, Pague Depois',
-    heroSubtitulo: link.heroSubtitulo || '',
-    campos:        (link.campos && link.campos.length > 0) ? link.campos : globalCampos
-  };
-  try {
-    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(config))));
-    return `${origem}/?link=${encodeURIComponent(link.slug || link.id)}&d=${b64}`;
-  } catch(e) {
-    return `${origem}/?link=${encodeURIComponent(link.slug || link.id)}`;
-  }
+  const slug = encodeURIComponent(link.slug || link.id);
+  return `${origem}/?link=${slug}`;
 }
 
 function openNewLinkModal() {

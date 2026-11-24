@@ -828,6 +828,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (linkConfig) {
+    // Permite parâmetros humanos simples e curtos opcionais na URL (ex: ?link=lavadora&preco=89.90)
+    const customPreco = urlParams.get('preco') || urlParams.get('valor');
+    if (customPreco) {
+      const pNum = parseFloat(customPreco.replace(/[^\d,\.]/g, '').replace(',', '.'));
+      if (!isNaN(pNum) && pNum > 0) linkConfig.preco = pNum;
+    }
+    const customTitulo = urlParams.get('titulo') || urlParams.get('produto');
+    if (customTitulo) linkConfig.titulo = customTitulo;
+
     if (camposAtualizados && camposAtualizados.length > 0) {
       linkConfig.campos = camposAtualizados;
     } else if (!linkConfig.campos || linkConfig.campos.length === 0) {
