@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pagamento na Entrega &middot; Receba Primeiro, Pague Depois</title>
+<title>Finalizar Pedido &middot; Pagamento Seguro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -635,7 +635,7 @@ input, select { font-family: inherit; }
         </div>
 
         <div class="product-price-box">
-          <div class="price-sub-label">Total a pagar na entrega</div>
+          <div class="price-sub-label">Valor Total</div>
           <div class="price-total-val" id="display-product-price">R$ 0,00</div>
         </div>
       </div>
@@ -669,7 +669,7 @@ input, select { font-family: inherit; }
     </div>
     <h2 class="success-title">Pedido Confirmado com Sucesso!</h2>
     <p class="success-subtitle">
-      Seu pedido foi registrado para <strong>envio imediato com pagamento na entrega</strong>. Você só pagará quando receber o pacote em casa!
+      Seu pedido foi registrado para <strong>envio imediato</strong>. Em breve você receberá as atualizações do envio!
     </p>
 
     <div class="order-receipt-box" id="success-receipt-rows">
@@ -1030,7 +1030,7 @@ async function handleOrderSubmit(e) {
       <span class="val">${escapeHtml(orderPayload.produto)}</span>
     </div>
     <div class="receipt-row">
-      <span class="label">Total no Recebimento:</span>
+      <span class="label">Total do Pedido:</span>
       <span class="val highlight">${escapeHtml(orderPayload.valor)}</span>
     </div>
   `;
@@ -1045,10 +1045,10 @@ async function handleOrderSubmit(e) {
     }
   });
 
-  // Botão WhatsApp
+  // Botão WhatsApp com o número oficial do suporte (+55 19 98844-7007)
   const firstClientName = Object.values(dadosCliente)[0] || 'Cliente';
-  const textMsg = encodeURIComponent(`Olá! Acabei de fazer o pedido #${orderPayload.codigo} (${orderPayload.produto}) com Pagamento na Entrega no nome de ${firstClientName}. Gostaria de confirmar!`);
-  document.getElementById('whatsapp-btn-link').href = `https://api.whatsapp.com/send?text=${textMsg}`;
+  const textMsg = encodeURIComponent(`Olá! Acabei de fazer o pedido #${orderPayload.codigo} (${orderPayload.produto}) no nome de ${firstClientName}. Gostaria de confirmar!`);
+  document.getElementById('whatsapp-btn-link').href = `https://api.whatsapp.com/send?phone=5519988447007&text=${textMsg}`;
 
   // Exibe tela de sucesso
   document.getElementById('cod-order-form').style.display = 'none';
